@@ -11,11 +11,11 @@
   ============================================================================
   GUÍA RÁPIDA DE EDICIÓN — léeme antes de publicar
   ============================================================================
-  1) FOTOS Y VÍDEOS: busca los bloques marcados con [PLACEHOLDER] más abajo.
-     - Hero: reemplaza la URL de HERO_VIDEO_POSTER (imagen) y, si tienes vídeo,
-       usa HERO_VIDEO_EMBED para pegar un iframe de YouTube/Vimeo/Wistia.
-     - Antes/Después: reemplaza BEFORE_AFTER_PHOTO por la URL de tu foto.
-     - Resultados: reemplaza cada tarjeta de RESULT_VIDEOS y RESULT_PHOTOS.
+  1) FOTOS: busca los bloques marcados con [PLACEHOLDER] más abajo.
+     - Hero: reemplaza la imagen del bloque "hero-media" por tu foto/vídeo.
+     - Antes/Después: hay DOS fotos, una con badge "Antes" y otra "Después".
+     - Resultados: es una galería de fotos (capturas/testimonios), edita
+       RESULT_PHOTOS_COUNT en el <script> o sustituye directamente las tarjetas.
   2) TEXTOS: todo lo que está entre [ ] corchetes es un ejemplo/placeholder que
      debes reescribir con tu historia real. El resto del copy ya está listo
      para usar tal cual, pero siéntete libre de ajustarlo a tu voz.
@@ -31,15 +31,15 @@
 
 <style>
   :root{
-    --bg:#ffffff;
-    --bg-soft:#f7f7f8;
-    --ink:#0b0b0c;
-    --muted:#5b5b63;
-    --muted-2:#8a8a92;
-    --line:#e7e7ea;
-    --accent:#0b0b0c;
-    --accent-ink:#ffffff;
-    --red:#e2103f;
+    --bg:#0a0a0b;
+    --bg-soft:#161619;
+    --ink:#f5f5f6;
+    --muted:#a8a8b0;
+    --muted-2:#7c7c85;
+    --line:#28282e;
+    --accent:#ffffff;
+    --accent-ink:#0a0a0b;
+    --red:#ff2d55;
     --radius:14px;
     --maxw:1080px;
     --font-display:'Hanken Grotesk','Segoe UI',-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;
@@ -83,7 +83,7 @@
 
   /* ---------------- header ---------------- */
   .hdr{
-    position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);
+    position:sticky;top:0;z-index:40;background:rgba(10,10,11,.86);
     backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
   }
   .hdr .in{max-width:var(--maxw);margin:0 auto;padding:16px 20px;
@@ -123,19 +123,22 @@
   }
 
   /* ---------------- story / antes-después ---------------- */
-  .story{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center}
-  @media (max-width:840px){ .story{grid-template-columns:1fr;gap:32px} }
-  .story-photo-wrap{
+  .story{display:grid;grid-template-columns:1fr;gap:44px;align-items:center}
+  .ba-photos{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media (max-width:520px){ .ba-photos{gap:10px} }
+  .ba-photo{
     position:relative;border-radius:20px;overflow:hidden;
     border:1px solid var(--line);background:var(--bg-soft);
-    aspect-ratio:4/5;
+    aspect-ratio:3/4;
   }
-  .story-photo-wrap img{width:100%;height:100%;object-fit:cover}
-  .story-photo-wrap .badge{
-    position:absolute;top:16px;left:16px;background:#fff;border:1px solid var(--line);
+  .ba-photo img{width:100%;height:100%;object-fit:cover}
+  .ba-photo .badge{
+    position:absolute;top:14px;left:14px;background:#ffffff;color:#0a0a0b;
+    border:1px solid var(--line);
     padding:8px 14px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.04em;
     text-transform:uppercase;
   }
+  .ba-photo .badge.dark{background:#0a0a0b;color:#ffffff;border-color:rgba(255,255,255,.2)}
   .ba-row{display:flex;gap:10px;margin:22px 0 6px}
   .ba-pill{
     flex:1;border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--bg-soft)
@@ -145,26 +148,6 @@
   .cta-row{margin-top:26px}
 
   /* ---------------- results ---------------- */
-  .vcar{margin-top:8px}
-  .vcar-stage{display:flex;align-items:center;gap:14px}
-  .vcar-arrow{
-    background:#fff;border:1px solid var(--line);width:42px;height:42px;border-radius:999px;
-    font-size:20px;cursor:pointer;flex:none;display:flex;align-items:center;justify-content:center;
-  }
-  .vcar-main{
-    flex:1;border-radius:18px;overflow:hidden;border:1px solid var(--line);
-    background:#0b0b0c;position:relative;aspect-ratio:16/9;
-  }
-  .vcar-main img{width:100%;height:100%;object-fit:cover;opacity:.75}
-  .vcar-main .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-  .vcar-main .play span{width:60px;height:60px;border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center}
-  .vcar-meta{text-align:center;margin-top:16px}
-  .vid-cap{font-weight:800;margin:0;white-space:pre-line}
-  .vcar-name{color:var(--muted);font-size:14px}
-  .vcar-dots{display:flex;justify-content:center;gap:8px;margin-top:14px}
-  .vcar-dot{width:8px;height:8px;border-radius:999px;background:var(--line);border:0;cursor:pointer;padding:0}
-  .vcar-dot.on{background:var(--ink);width:22px;border-radius:999px}
-
   .tgrid{
     margin-top:52px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;
   }
@@ -183,17 +166,18 @@
 
   /* ---------------- guarantee ---------------- */
   .guar{
-    text-align:center;background:var(--ink);color:#fff;border-radius:24px;padding:64px 28px;
+    text-align:center;background:var(--bg-soft);border:1px solid var(--line);
+    color:var(--ink);border-radius:24px;padding:64px 28px;
   }
   .seal{
     display:inline-flex;flex-direction:column;align-items:center;justify-content:center;
-    width:96px;height:96px;border-radius:999px;border:2px solid rgba(255,255,255,.5);
+    width:96px;height:96px;border-radius:999px;border:2px solid var(--line);
     font-size:13px;font-weight:800;line-height:1.2;margin-bottom:22px;
   }
-  .guar h2{color:#fff}
-  .guar p{color:rgba(255,255,255,.72);max-width:56ch;margin:0 auto;font-size:16.5px}
+  .guar h2{color:var(--ink)}
+  .guar p{color:var(--muted);max-width:56ch;margin:0 auto;font-size:16.5px}
   .trust-row{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 28px;margin-top:30px}
-  .trust-row .t{font-size:14px;color:rgba(255,255,255,.85);display:flex;align-items:center;gap:8px}
+  .trust-row .t{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:8px}
   .trust-row .c{color:var(--red);font-weight:900}
 
   /* ---------------- faq ---------------- */
@@ -221,24 +205,24 @@
   .step-hint{color:var(--muted);font-size:14px;margin-bottom:24px}
   .field{
     width:100%;padding:16px 18px;border:1.5px solid var(--line);border-radius:12px;
-    font-size:16px;font-family:inherit;background:#fff;
+    font-size:16px;font-family:inherit;background:#fff;color:#0a0a0b;
   }
-  .field:focus{outline:none;border-color:var(--ink)}
+  .field:focus{outline:none;border-color:#0a0a0b}
   textarea.field{min-height:120px;resize:vertical}
   .choice-list{display:flex;flex-direction:column;gap:10px}
   .choice{
     width:100%;text-align:left;padding:16px 18px;border:1.5px solid var(--line);border-radius:12px;
-    background:#fff;font-size:15.5px;cursor:pointer;font-family:inherit;
+    background:#fff;color:#0a0a0b;font-size:15.5px;cursor:pointer;font-family:inherit;
   }
-  .choice:hover{border-color:var(--ink)}
-  .choice.sel{border-color:var(--ink);background:var(--ink);color:#fff;font-weight:700}
+  .choice:hover{border-color:#0a0a0b}
+  .choice.sel{border-color:#0a0a0b;background:#0a0a0b;color:#fff;font-weight:700}
   .step-actions{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
   .link-back{background:none;border:0;color:var(--muted);cursor:pointer;font-size:14px;padding:8px}
   .step{display:none}
   .step.active{display:block}
   .success{text-align:center;padding:12px 0}
   .success .check{
-    width:64px;height:64px;border-radius:999px;background:var(--ink);color:#fff;
+    width:64px;height:64px;border-radius:999px;background:var(--red);color:#fff;
     display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:28px;
   }
 
@@ -254,8 +238,8 @@
   /* ---------------- sticky bar ---------------- */
   .sticky{
     position:fixed;left:0;right:0;bottom:-100px;z-index:50;
-    background:#fff;border-top:1px solid var(--line);
-    box-shadow:0 -10px 30px rgba(0,0,0,.06);transition:bottom .25s ease;
+    background:var(--bg-soft);border-top:1px solid var(--line);
+    box-shadow:0 -10px 30px rgba(0,0,0,.35);transition:bottom .25s ease;
   }
   .sticky.show{bottom:0}
   .sticky .in{max-width:var(--maxw);margin:0 auto;padding:14px 20px;
@@ -327,10 +311,16 @@
           </div>
         </div>
 
-        <!-- [PLACEHOLDER] Foto única de antes/después -->
-        <div class="story-photo-wrap">
-          <span class="badge">Antes → Después</span>
-          <img src="https://placehold.co/800x1000/f2f2f3/8a8a92?text=Sube+aqu%C3%ADi+tu+foto%0AAntes+%2F+Despu%C3%A9s" alt="Foto antes y después de Sami Nedelea" />
+        <!-- [PLACEHOLDER] Dos fotos: una de "antes" y otra de "después" -->
+        <div class="ba-photos">
+          <div class="ba-photo">
+            <span class="badge">Antes</span>
+            <img src="https://placehold.co/600x800/161619/7c7c85?text=Sube+aqu%C3%AD+tu+foto%0ADE+ANTES" alt="Foto de antes de Sami Nedelea" />
+          </div>
+          <div class="ba-photo">
+            <span class="badge dark">Después</span>
+            <img src="https://placehold.co/600x800/161619/7c7c85?text=Sube+aqu%C3%AD+tu+foto%0ADE+DESPU%C3%89S" alt="Foto de después de Sami Nedelea" />
+          </div>
         </div>
       </div>
     </div>
@@ -344,25 +334,7 @@
         <p class="lede">[Sustituye por: "Estos son algunos de los resultados que han conseguido las personas con las que he trabajado."]</p>
       </div>
 
-      <!-- [PLACEHOLDER] Carrusel de vídeos-testimonio. Duplica/edita las
-           tarjetas del array RESULT_VIDEOS en el <script> de abajo. -->
-      <div class="vcar">
-        <div class="vcar-stage">
-          <button class="vcar-arrow" onclick="vcarNav(-1)" aria-label="Anterior">‹</button>
-          <div class="vcar-main" id="vcarMain" onclick="goToForm('result_video')">
-            <img id="vcarImg" src="" alt="" />
-            <div class="play"><span>▶</span></div>
-          </div>
-          <button class="vcar-arrow" onclick="vcarNav(1)" aria-label="Siguiente">›</button>
-        </div>
-        <div class="vcar-meta">
-          <p class="vid-cap" id="vcarCap"></p>
-          <span class="vcar-name" id="vcarName"></span>
-        </div>
-        <div class="vcar-dots" id="vcarDots"></div>
-      </div>
-
-      <!-- [PLACEHOLDER] Grid de testimonios/capturas -->
+      <!-- [PLACEHOLDER] Galería de fotos/capturas de resultados -->
       <div class="tgrid" id="tgrid"></div>
 
       <div class="center" style="margin-top:44px">
@@ -534,14 +506,7 @@ document.getElementById('calendlyBtn').addEventListener('click', function(e){
   }
 });
 
-/* [PLACEHOLDER] Vídeos de resultados — edita título, nombre e imagen/URL de cada uno */
-var RESULT_VIDEOS = [
-  { title: "[Resultado 1: ej. 'DE 0 A SU PRIMER CLIENTE EN 30 DÍAS']", name: "[Nombre]", img: "https://placehold.co/640x360/111114/ffffff?text=V%C3%ADdeo+testimonio+1" },
-  { title: "[Resultado 2: ej. 'DUPLICÓ SUS INGRESOS EN 2 MESES']", name: "[Nombre]", img: "https://placehold.co/640x360/111114/ffffff?text=V%C3%ADdeo+testimonio+2" },
-  { title: "[Resultado 3: ej. 'LANZÓ SU NEGOCIO DESDE CERO']", name: "[Nombre]", img: "https://placehold.co/640x360/111114/ffffff?text=V%C3%ADdeo+testimonio+3" }
-];
-
-/* [PLACEHOLDER] Capturas/fotos de testimonios en texto */
+/* [PLACEHOLDER] Número de capturas/fotos de testimonios a mostrar en la galería */
 var RESULT_PHOTOS_COUNT = 8;
 
 /* [PLACEHOLDER] Preguntas frecuentes — edita a tu gusto */
@@ -557,32 +522,6 @@ var FAQS = [
 
 function track(name, params){ try{ console.log('[track]', name, params); }catch(e){} }
 function goToForm(loc){ track('cta_click', {loc: loc}); document.getElementById('aplicar').scrollIntoView({behavior:'smooth'}); }
-
-/* ---- video carousel ---- */
-var vIdx = 0;
-function renderVcar(){
-  var n = RESULT_VIDEOS.length;
-  var cur = RESULT_VIDEOS[vIdx];
-  document.getElementById('vcarImg').src = cur.img;
-  document.getElementById('vcarImg').alt = cur.title;
-  document.getElementById('vcarCap').textContent = cur.title;
-  document.getElementById('vcarName').textContent = cur.name;
-  var dots = document.getElementById('vcarDots');
-  dots.innerHTML = '';
-  for (var i = 0; i < n; i++){
-    var d = document.createElement('button');
-    d.className = 'vcar-dot' + (i === vIdx ? ' on' : '');
-    d.setAttribute('aria-label', 'Ver vídeo ' + (i+1));
-    (function(idx){ d.onclick = function(){ vIdx = idx; renderVcar(); }; })(i);
-    dots.appendChild(d);
-  }
-}
-function vcarNav(dir){
-  var n = RESULT_VIDEOS.length;
-  vIdx = (vIdx + dir + n) % n;
-  renderVcar();
-}
-renderVcar();
 
 /* ---- testimonial grid ---- */
 var tgrid = document.getElementById('tgrid');
