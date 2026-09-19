@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sami Nedelea — Llamada estratégica gratuita</title>
+<meta name="description" content="Aprende el método de Sami Nedelea para generar ingresos con tu propio negocio digital. Agenda tu llamada estratégica gratuita." />
+<link rel="icon" href="data:,">
+
+<!--
+  ============================================================================
+  GUÍA RÁPIDA DE EDICIÓN — léeme antes de publicar
+  ============================================================================
+  1) FOTOS Y VÍDEOS: busca los bloques marcados con [PLACEHOLDER] más abajo.
+     - Hero: reemplaza la URL de HERO_VIDEO_POSTER (imagen) y, si tienes vídeo,
+       usa HERO_VIDEO_EMBED para pegar un iframe de YouTube/Vimeo/Wistia.
+     - Antes/Después: reemplaza BEFORE_AFTER_PHOTO por la URL de tu foto.
+     - Resultados: reemplaza cada tarjeta de RESULT_VIDEOS y RESULT_PHOTOS.
+  2) TEXTOS: todo lo que está entre [ ] corchetes es un ejemplo/placeholder que
+     debes reescribir con tu historia real. El resto del copy ya está listo
+     para usar tal cual, pero siéntete libre de ajustarlo a tu voz.
+  3) CALENDLY: busca CALENDLY_URL más abajo (aparece 2 veces) y pon tu enlace
+     real de Calendly (créalo gratis en calendly.com). Mientras tanto el botón
+     abre un aviso en vez de romper la página.
+  4) INSTAGRAM: ya está enlazado a @saminedelea_.
+  5) DOMINIO: una vez tengas index.html en tu hosting (Netlify, Vercel, GitHub
+     Pages...) conecta saminedelea.com desde el panel de tu registrador
+     (registros A/CNAME). Pregúntame cuando lo tengas y te ayudo con eso.
+  ============================================================================
+-->
+
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#f7f7f8;
+    --ink:#0b0b0c;
+    --muted:#5b5b63;
+    --muted-2:#8a8a92;
+    --line:#e7e7ea;
+    --accent:#0b0b0c;
+    --accent-ink:#ffffff;
+    --red:#e2103f;
+    --radius:14px;
+    --maxw:1080px;
+    --font-display:'Hanken Grotesk','Segoe UI',-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;
+    --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  .block{padding:88px 0}
+  @media (max-width:680px){ .block{padding:56px 0} }
+  h1,h2,h3{font-family:var(--font-display);font-weight:800;letter-spacing:-0.02em;margin:0 0 14px}
+  .display{font-size:clamp(30px,5vw,52px);line-height:1.08}
+  .center{text-align:center}
+  .lede{color:var(--muted);font-size:18px;max-width:60ch;margin:0 auto}
+  .accent{color:var(--red)}
+  .head{text-align:center;max-width:640px;margin:0 auto 44px}
+  .head .lede{margin-top:10px}
+
+  /* ---------------- buttons ---------------- */
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--accent);color:var(--accent-ink);
+    border:0;border-radius:999px;padding:17px 30px;
+    font-weight:700;font-size:16px;letter-spacing:.01em;
+    cursor:pointer;text-decoration:none;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.18)}
+  .btn--lg{padding:20px 38px;font-size:18px;border-radius:999px}
+  .btn--ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+  .btn--pulse{animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(11,11,12,.14)}50%{box-shadow:0 0 0 14px rgba(11,11,12,0)}}
+  .arrow{display:inline-block}
+
+  /* ---------------- header ---------------- */
+  .hdr{
+    position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  }
+  .hdr .in{max-width:var(--maxw);margin:0 auto;padding:16px 20px;
+    display:flex;align-items:center;justify-content:space-between}
+  .hdr .brand{font-family:var(--font-display);font-weight:800;font-size:19px;letter-spacing:-.01em;text-decoration:none;color:var(--ink)}
+  .hdr .brand span{color:var(--red)}
+  .hdr .btn{padding:11px 20px;font-size:14px}
+
+  /* ---------------- hero ---------------- */
+  .hero{padding:64px 0 60px;text-align:center}
+  .kicker{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--bg-soft);border:1px solid var(--line);
+    padding:8px 16px;border-radius:999px;font-size:13px;font-weight:700;
+    color:var(--muted);margin-bottom:22px;text-transform:uppercase;letter-spacing:.06em;
+  }
+  .kicker .dot{width:7px;height:7px;border-radius:999px;background:var(--red)}
+  .hero .sub{color:var(--muted);font-size:19px;max-width:56ch;margin:18px auto 0}
+  .hero-media{
+    margin:40px auto 0;max-width:880px;position:relative;
+    border-radius:20px;overflow:hidden;border:1px solid var(--line);
+    box-shadow:0 30px 60px -30px rgba(0,0,0,.25);
+    cursor:pointer;background:#000;
+  }
+  .hero-media img{width:100%;display:block;opacity:.92}
+  .hero-media .play{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  }
+  .hero-media .play span{
+    width:74px;height:74px;border-radius:999px;background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  .ph-tag{
+    position:absolute;bottom:14px;left:14px;background:rgba(0,0,0,.7);color:#fff;
+    font-size:11px;font-weight:700;padding:6px 10px;border-radius:8px;letter-spacing:.03em;
+  }
+
+  /* ---------------- story / antes-después ---------------- */
+  .story{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center}
+  @media (max-width:840px){ .story{grid-template-columns:1fr;gap:32px} }
+  .story-photo-wrap{
+    position:relative;border-radius:20px;overflow:hidden;
+    border:1px solid var(--line);background:var(--bg-soft);
+    aspect-ratio:4/5;
+  }
+  .story-photo-wrap img{width:100%;height:100%;object-fit:cover}
+  .story-photo-wrap .badge{
+    position:absolute;top:16px;left:16px;background:#fff;border:1px solid var(--line);
+    padding:8px 14px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+  .ba-row{display:flex;gap:10px;margin:22px 0 6px}
+  .ba-pill{
+    flex:1;border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--bg-soft)
+  }
+  .ba-pill b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2);margin-bottom:4px}
+  .ba-pill p{margin:0;font-size:14.5px;color:var(--ink)}
+  .cta-row{margin-top:26px}
+
+  /* ---------------- results ---------------- */
+  .vcar{margin-top:8px}
+  .vcar-stage{display:flex;align-items:center;gap:14px}
+  .vcar-arrow{
+    background:#fff;border:1px solid var(--line);width:42px;height:42px;border-radius:999px;
+    font-size:20px;cursor:pointer;flex:none;display:flex;align-items:center;justify-content:center;
+  }
+  .vcar-main{
+    flex:1;border-radius:18px;overflow:hidden;border:1px solid var(--line);
+    background:#0b0b0c;position:relative;aspect-ratio:16/9;
+  }
+  .vcar-main img{width:100%;height:100%;object-fit:cover;opacity:.75}
+  .vcar-main .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .vcar-main .play span{width:60px;height:60px;border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center}
+  .vcar-meta{text-align:center;margin-top:16px}
+  .vid-cap{font-weight:800;margin:0;white-space:pre-line}
+  .vcar-name{color:var(--muted);font-size:14px}
+  .vcar-dots{display:flex;justify-content:center;gap:8px;margin-top:14px}
+  .vcar-dot{width:8px;height:8px;border-radius:999px;background:var(--line);border:0;cursor:pointer;padding:0}
+  .vcar-dot.on{background:var(--ink);width:22px;border-radius:999px}
+
+  .tgrid{
+    margin-top:52px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;
+  }
+  .tcard{
+    aspect-ratio:1/1;border-radius:14px;background:var(--bg-soft);border:1px dashed var(--line);
+    display:flex;align-items:center;justify-content:center;color:var(--muted-2);font-size:12px;
+    text-align:center;padding:10px;
+  }
+
+  /* ---------------- instagram ---------------- */
+  .ig{
+    display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;
+    background:var(--bg-soft);border:1px solid var(--line);border-radius:24px;padding:56px 24px;
+  }
+  .ig .handle{color:var(--red);font-weight:800}
+
+  /* ---------------- guarantee ---------------- */
+  .guar{
+    text-align:center;background:var(--ink);color:#fff;border-radius:24px;padding:64px 28px;
+  }
+  .seal{
+    display:inline-flex;flex-direction:column;align-items:center;justify-content:center;
+    width:96px;height:96px;border-radius:999px;border:2px solid rgba(255,255,255,.5);
+    font-size:13px;font-weight:800;line-height:1.2;margin-bottom:22px;
+  }
+  .guar h2{color:#fff}
+  .guar p{color:rgba(255,255,255,.72);max-width:56ch;margin:0 auto;font-size:16.5px}
+  .trust-row{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 28px;margin-top:30px}
+  .trust-row .t{font-size:14px;color:rgba(255,255,255,.85);display:flex;align-items:center;gap:8px}
+  .trust-row .c{color:var(--red);font-weight:900}
+
+  /* ---------------- faq ---------------- */
+  .faq-list{max-width:760px;margin:0 auto}
+  .faq{border-bottom:1px solid var(--line)}
+  .faq button{
+    width:100%;background:none;border:0;padding:22px 4px;display:flex;
+    align-items:center;justify-content:space-between;text-align:left;
+    font-family:var(--font-display);font-weight:700;font-size:17px;cursor:pointer;color:var(--ink);
+  }
+  .faq .q-ico{font-size:22px;color:var(--muted-2);transition:transform .2s ease}
+  .faq.open .q-ico{transform:rotate(45deg)}
+  .faq .a{max-height:0;overflow:hidden;transition:max-height .25s ease}
+  .faq.open .a{max-height:400px}
+  .faq .a p{margin:0 4px 22px;color:var(--muted)}
+
+  /* ---------------- form / typeform ---------------- */
+  .apply{
+    background:var(--bg-soft);border:1px solid var(--line);border-radius:24px;
+    padding:52px 28px;max-width:640px;margin:0 auto;
+  }
+  .apply-progress{height:5px;background:var(--line);border-radius:999px;overflow:hidden;margin-bottom:34px}
+  .apply-progress i{display:block;height:100%;background:var(--ink);border-radius:999px;transition:width .3s ease}
+  .step-q{font-family:var(--font-display);font-weight:800;font-size:24px;margin-bottom:6px}
+  .step-hint{color:var(--muted);font-size:14px;margin-bottom:24px}
+  .field{
+    width:100%;padding:16px 18px;border:1.5px solid var(--line);border-radius:12px;
+    font-size:16px;font-family:inherit;background:#fff;
+  }
+  .field:focus{outline:none;border-color:var(--ink)}
+  textarea.field{min-height:120px;resize:vertical}
+  .choice-list{display:flex;flex-direction:column;gap:10px}
+  .choice{
+    width:100%;text-align:left;padding:16px 18px;border:1.5px solid var(--line);border-radius:12px;
+    background:#fff;font-size:15.5px;cursor:pointer;font-family:inherit;
+  }
+  .choice:hover{border-color:var(--ink)}
+  .choice.sel{border-color:var(--ink);background:var(--ink);color:#fff;font-weight:700}
+  .step-actions{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
+  .link-back{background:none;border:0;color:var(--muted);cursor:pointer;font-size:14px;padding:8px}
+  .step{display:none}
+  .step.active{display:block}
+  .success{text-align:center;padding:12px 0}
+  .success .check{
+    width:64px;height:64px;border-radius:999px;background:var(--ink);color:#fff;
+    display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:28px;
+  }
+
+  /* ---------------- footer ---------------- */
+  .ftr{border-top:1px solid var(--line);padding:44px 0 90px;text-align:center}
+  .ftr .brand{font-family:var(--font-display);font-weight:800;font-size:18px;margin-bottom:14px}
+  .ftr .links{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;margin-bottom:16px}
+  .ftr .links a{color:var(--muted);font-size:13px;text-decoration:none}
+  .ftr .links a:hover{color:var(--ink)}
+  .ftr .copy{color:var(--muted-2);font-size:13px;margin-bottom:10px}
+  .ftr .disc{color:var(--muted-2);font-size:12px;max-width:640px;margin:0 auto}
+
+  /* ---------------- sticky bar ---------------- */
+  .sticky{
+    position:fixed;left:0;right:0;bottom:-100px;z-index:50;
+    background:#fff;border-top:1px solid var(--line);
+    box-shadow:0 -10px 30px rgba(0,0,0,.06);transition:bottom .25s ease;
+  }
+  .sticky.show{bottom:0}
+  .sticky .in{max-width:var(--maxw);margin:0 auto;padding:14px 20px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .sticky .txt b{display:block;font-size:14.5px}
+  .sticky .txt span{color:var(--muted);font-size:12.5px}
+  .sticky .btn{padding:12px 20px;font-size:14px;white-space:nowrap}
+  @media (max-width:520px){ .sticky .txt span{display:none} }
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="in">
+    <a class="brand" href="#top">Sami <span>Nedelea</span></a>
+    <a class="btn" href="#aplicar">Agenda tu llamada</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============================== HERO ============================== -->
+  <section class="hero wrap">
+    <span class="kicker"><span class="dot"></span> Llamada estratégica gratuita</span>
+    <h1 class="display">
+      [Aprende cómo pasé de <span class="accent">0 a construir mi propio negocio digital</span> — y cómo puedes empezar tú también]
+    </h1>
+    <p class="sub">
+      [Sustituye este subtítulo por una frase de 1-2 líneas: qué prometes, para quién es y qué consigue la persona al reservar la llamada.]
+    </p>
+
+    <!-- [PLACEHOLDER] HERO — imagen o vídeo de presentación.
+         Para vídeo: reemplaza esta <div> por un <iframe> de YouTube/Vimeo, o
+         pega el embed de tu plataforma, manteniendo la clase "hero-media". -->
+    <div class="hero-media" id="heroMedia" onclick="goToForm('hero_media')">
+      <img src="https://placehold.co/1120x630/f2f2f3/8a8a92?text=Sube+aqu%C3%ADi+tu+foto+o+v%C3%ADdeo+de+presentaci%C3%B3n" alt="Vídeo de presentación de Sami Nedelea" />
+      <div class="play"><span>▶</span></div>
+      <span class="ph-tag">[PLACEHOLDER] Foto o vídeo de presentación</span>
+    </div>
+
+    <div class="cta-row" style="margin-top:34px">
+      <a href="#aplicar" class="btn btn--lg btn--pulse" onclick="track('cta_click',{loc:'hero'})">
+        AGENDAR MI LLAMADA GRATIS <span class="arrow">↓</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ====================== ANTES / DESPUÉS (STORY) ===================== -->
+  <section class="block">
+    <div class="wrap">
+      <div class="story">
+        <div>
+          <h2 class="display">De <span class="accent">[tu punto de partida]</span> a [tu logro actual]</h2>
+          <div class="ba-row">
+            <div class="ba-pill">
+              <b>Antes</b>
+              <p>[Describe en 1-2 frases cómo era tu situación antes: qué te frustraba, qué te faltaba, dónde estabas.]</p>
+            </div>
+            <div class="ba-pill">
+              <b>Después</b>
+              <p>[Describe en 1-2 frases cómo es tu situación ahora: qué lograste, qué cambió, qué resultado obtuviste.]</p>
+            </div>
+          </div>
+          <p style="margin-top:18px;color:var(--muted)">
+            [Añade un párrafo breve contando tu historia con más contexto: cuándo empezaste, qué obstáculo superaste y por qué decidiste enseñar esto a otras personas. 3-4 frases es suficiente.]
+          </p>
+          <div class="cta-row">
+            <a href="#aplicar" class="btn" onclick="track('cta_click',{loc:'story'})">Quiero mi transformación <span class="arrow">↓</span></a>
+          </div>
+        </div>
+
+        <!-- [PLACEHOLDER] Foto única de antes/después -->
+        <div class="story-photo-wrap">
+          <span class="badge">Antes → Después</span>
+          <img src="https://placehold.co/800x1000/f2f2f3/8a8a92?text=Sube+aqu%C3%ADi+tu+foto%0AAntes+%2F+Despu%C3%A9s" alt="Foto antes y después de Sami Nedelea" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= RESULTADOS ============================ -->
+  <section class="block" style="background:var(--bg-soft)">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="display">Resultados reales</h2>
+        <p class="lede">[Sustituye por: "Estos son algunos de los resultados que han conseguido las personas con las que he trabajado."]</p>
+      </div>
+
+      <!-- [PLACEHOLDER] Carrusel de vídeos-testimonio. Duplica/edita las
+           tarjetas del array RESULT_VIDEOS en el <script> de abajo. -->
+      <div class="vcar">
+        <div class="vcar-stage">
+          <button class="vcar-arrow" onclick="vcarNav(-1)" aria-label="Anterior">‹</button>
+          <div class="vcar-main" id="vcarMain" onclick="goToForm('result_video')">
+            <img id="vcarImg" src="" alt="" />
+            <div class="play"><span>▶</span></div>
+          </div>
+          <button class="vcar-arrow" onclick="vcarNav(1)" aria-label="Siguiente">›</button>
+        </div>
+        <div class="vcar-meta">
+          <p class="vid-cap" id="vcarCap"></p>
+          <span class="vcar-name" id="vcarName"></span>
+        </div>
+        <div class="vcar-dots" id="vcarDots"></div>
+      </div>
+
+      <!-- [PLACEHOLDER] Grid de testimonios/capturas -->
+      <div class="tgrid" id="tgrid"></div>
+
+      <div class="center" style="margin-top:44px">
+        <a href="#aplicar" class="btn" onclick="track('cta_click',{loc:'resultados'})">Quiero ser el próximo caso de éxito <span class="arrow">↓</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= INSTAGRAM ============================= -->
+  <section class="block">
+    <div class="wrap">
+      <div class="ig">
+        <h2 class="display" style="font-size:clamp(26px,4vw,42px)">Mira más resultados</h2>
+        <p class="lede">
+          [Ajusta este texto]: En mis historias destacadas de Instagram <span class="handle">@saminedelea_</span> encontrarás más casos reales y contenido de valor.
+        </p>
+        <a class="btn btn--ghost" href="https://www.instagram.com/saminedelea_/" target="_blank" rel="noreferrer">
+          Ver Instagram @saminedelea_
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= GARANTÍA ============================= -->
+  <section class="block">
+    <div class="wrap">
+      <div class="guar">
+        <div class="seal">100%<br/>GRATIS</div>
+        <h2 class="display">Cero riesgo. Solo una conversación.</h2>
+        <p>
+          [Ajusta este texto]: La llamada es 100% gratuita, sin compromiso y sin presión de venta. Es una conversación para entender tu situación y ver si puedo ayudarte a conseguir tu objetivo.
+        </p>
+        <div class="trust-row">
+          <span class="t"><span class="c">✓</span> Sin tarjeta de crédito</span>
+          <span class="t"><span class="c">✓</span> 100% personalizada</span>
+          <span class="t"><span class="c">✓</span> Plazas limitadas cada semana</span>
+          <span class="t"><span class="c">✓</span> Cero compromiso</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================ FAQ ================================ -->
+  <section class="block">
+    <div class="wrap">
+      <div class="head"><h2 class="display">Preguntas frecuentes</h2></div>
+      <div class="faq-list" id="faqList"></div>
+    </div>
+  </section>
+
+  <!-- ============================ FORMULARIO ============================ -->
+  <section class="block" id="aplicar" style="background:var(--bg-soft)">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="display">Agenda tu llamada gratuita</h2>
+        <p class="lede">Responde estas preguntas rápidas para reservar tu hueco.</p>
+      </div>
+
+      <div class="apply">
+        <div class="apply-progress"><i id="progressBar" style="width:16%"></i></div>
+        <form id="applyForm">
+
+          <div class="step active" data-step="0">
+            <div class="step-q">¿Cuándo te gustaría empezar?</div>
+            <div class="step-hint">Si la llamada confirma que puedo ayudarte.</div>
+            <div class="choice-list" data-field="disponible">
+              <button type="button" class="choice">Ahora mismo</button>
+              <button type="button" class="choice">Esta semana</button>
+              <button type="button" class="choice">Aún no lo sé</button>
+            </div>
+          </div>
+
+          <div class="step" data-step="1">
+            <div class="step-q">¿Cómo te llamas?</div>
+            <div class="step-hint">Tu nombre y apellido.</div>
+            <input class="field" type="text" name="nombre" placeholder="Escribe tu nombre aquí…" required />
+            <div class="step-actions">
+              <button type="button" class="link-back" onclick="prevStep()">← Volver</button>
+              <button type="button" class="btn" onclick="nextStep()">Continuar</button>
+            </div>
+          </div>
+
+          <div class="step" data-step="2">
+            <div class="step-q">¿A qué email te confirmo la llamada?</div>
+            <div class="step-hint">Revisa que esté bien escrito.</div>
+            <input class="field" type="email" name="email" placeholder="tunombre@email.com" required />
+            <div class="step-actions">
+              <button type="button" class="link-back" onclick="prevStep()">← Volver</button>
+              <button type="button" class="btn" onclick="nextStep()">Continuar</button>
+            </div>
+          </div>
+
+          <div class="step" data-step="3">
+            <div class="step-q">Cuéntame tu situación actual</div>
+            <div class="step-hint">¿Qué te gustaría conseguir? Sé honesto/a, esto lo leo yo.</div>
+            <textarea class="field" name="situacion" placeholder="Cuéntame tu situación y qué quieres conseguir…"></textarea>
+            <div class="step-actions">
+              <button type="button" class="link-back" onclick="prevStep()">← Volver</button>
+              <button type="button" class="btn" onclick="nextStep()">Continuar</button>
+            </div>
+          </div>
+
+          <div class="step" data-step="4">
+            <div class="step-q">Por último, ¿tu teléfono?</div>
+            <div class="step-hint">Por si necesito contactarte sobre tu llamada.</div>
+            <input class="field" type="tel" name="telefono" placeholder="+34 600 000 000" required />
+            <div class="step-actions">
+              <button type="button" class="link-back" onclick="prevStep()">← Volver</button>
+              <button type="submit" class="btn">Ver horarios disponibles</button>
+            </div>
+          </div>
+
+          <div class="step" data-step="5">
+            <div class="success">
+              <div class="check">✓</div>
+              <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:8px">¡Ya casi está!</h3>
+              <p style="color:var(--muted);margin-bottom:26px">Elige el horario que mejor te venga para tu llamada gratuita.</p>
+              <!-- [PLACEHOLDER] CALENDLY_URL: sustituye por tu enlace real, ej:
+                   https://calendly.com/saminedelea/llamada-estrategica -->
+              <a id="calendlyBtn" class="btn btn--lg" href="#" target="_blank" rel="noreferrer">
+                Agendar mi llamada ahora <span class="arrow">↓</span>
+              </a>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================== FOOTER ============================== -->
+<footer class="ftr">
+  <div class="wrap">
+    <div class="brand">Sami Nedelea</div>
+    <div class="links">
+      <a href="#">Política de privacidad</a>
+      <a href="#">Términos de uso</a>
+      <a href="https://www.instagram.com/saminedelea_/" target="_blank" rel="noreferrer">Instagram @saminedelea_</a>
+    </div>
+    <div class="copy">© 2026 Sami Nedelea</div>
+    <div class="disc">
+      Este sitio no forma parte de Facebook ni de Meta Platforms, Inc. [Ajusta este aviso si compartes resultados de clientes]: los resultados mostrados son reales y no garantizan que vayas a obtener los mismos; dependen de tu esfuerzo, dedicación y situación.
+    </div>
+  </div>
+</footer>
+
+<!-- ============================== STICKY BAR ============================ -->
+<div class="sticky" id="stickyBar">
+  <div class="in">
+    <div class="txt"><b>Tu llamada gratuita te espera</b><span>Plazas limitadas esta semana</span></div>
+    <a href="#aplicar" class="btn" onclick="track('cta_click',{loc:'sticky'})">Agendar ahora <span class="arrow">↓</span></a>
+  </div>
+</div>
+
+<script>
+/* ====================== CONFIG — edita aquí ====================== */
+// [PLACEHOLDER] Pon tu URL real de Calendly aquí (créala gratis en calendly.com)
+var CALENDLY_URL = "https://calendly.com/TU-USUARIO/llamada-gratuita";
+
+document.getElementById('calendlyBtn').href = CALENDLY_URL;
+document.getElementById('calendlyBtn').addEventListener('click', function(e){
+  if (CALENDLY_URL.indexOf('TU-USUARIO') !== -1) {
+    e.preventDefault();
+    alert('Falta configurar tu enlace de Calendly. Sustituye CALENDLY_URL en el <script> del index.html por tu enlace real.');
+  } else {
+    track('calendly_open', {});
+  }
+});
+
+/* [PLACEHOLDER] Vídeos de resultados — edita título, nombre e imagen/URL de cada uno */
+var RESULT_VIDEOS = [
+  { title: "[Resultado 1: ej. 'DE 0 A SU PRIMER CLIENTE EN 30 DÍAS']", name: "[Nombre]", img: "https://placehold.co/640x360/111114/ffffff?text=V%C3%ADdeo+testimonio+1" },
+  { title: "[Resultado 2: ej. 'DUPLICÓ SUS INGRESOS EN 2 MESES']", name: "[Nombre]", img: "https://placehold.co/640x360/111114/ffffff?text=V%C3%ADdeo+testimonio+2" },
+  { title: "[Resultado 3: ej. 'LANZÓ SU NEGOCIO DESDE CERO']", name: "[Nombre]", img: "https://placehold.co/640x360/111114/ffffff?text=V%C3%ADdeo+testimonio+3" }
+];
+
+/* [PLACEHOLDER] Capturas/fotos de testimonios en texto */
+var RESULT_PHOTOS_COUNT = 8;
+
+/* [PLACEHOLDER] Preguntas frecuentes — edita a tu gusto */
+var FAQS = [
+  { q: "¿La llamada es realmente gratis?", a: "Sí, 100%. No necesitas tarjeta ni pagas nada por la llamada. Es una conversación para entender tu situación y ver si puedo ayudarte." },
+  { q: "¿Necesito experiencia previa?", a: "[Edita esta respuesta según tu programa/servicio.]" },
+  { q: "¿Cuánto dura la llamada?", a: "[Edita: ej. 'Entre 20 y 30 minutos.']" },
+  { q: "¿Qué pasa después de la llamada?", a: "[Edita: explica qué ocurre si encajáis — siguiente paso, propuesta, etc.]" },
+  { q: "¿Funciona sin importar dónde vivo?", a: "[Edita según tu servicio: online/presencial, países, etc.]" }
+];
+
+/* ====================== fin config ====================== */
+
+function track(name, params){ try{ console.log('[track]', name, params); }catch(e){} }
+function goToForm(loc){ track('cta_click', {loc: loc}); document.getElementById('aplicar').scrollIntoView({behavior:'smooth'}); }
+
+/* ---- video carousel ---- */
+var vIdx = 0;
+function renderVcar(){
+  var n = RESULT_VIDEOS.length;
+  var cur = RESULT_VIDEOS[vIdx];
+  document.getElementById('vcarImg').src = cur.img;
+  document.getElementById('vcarImg').alt = cur.title;
+  document.getElementById('vcarCap').textContent = cur.title;
+  document.getElementById('vcarName').textContent = cur.name;
+  var dots = document.getElementById('vcarDots');
+  dots.innerHTML = '';
+  for (var i = 0; i < n; i++){
+    var d = document.createElement('button');
+    d.className = 'vcar-dot' + (i === vIdx ? ' on' : '');
+    d.setAttribute('aria-label', 'Ver vídeo ' + (i+1));
+    (function(idx){ d.onclick = function(){ vIdx = idx; renderVcar(); }; })(i);
+    dots.appendChild(d);
+  }
+}
+function vcarNav(dir){
+  var n = RESULT_VIDEOS.length;
+  vIdx = (vIdx + dir + n) % n;
+  renderVcar();
+}
+renderVcar();
+
+/* ---- testimonial grid ---- */
+var tgrid = document.getElementById('tgrid');
+for (var i = 1; i <= RESULT_PHOTOS_COUNT; i++){
+  var c = document.createElement('div');
+  c.className = 'tcard';
+  c.textContent = '📷 Testimonio ' + i;
+  tgrid.appendChild(c);
+}
+
+/* ---- FAQ ---- */
+var faqList = document.getElementById('faqList');
+FAQS.forEach(function(f, i){
+  var item = document.createElement('div');
+  item.className = 'faq';
+  item.innerHTML = '<button type="button"><span>' + f.q + '</span><span class="q-ico">+</span></button>' +
+                    '<div class="a"><p>' + f.a + '</p></div>';
+  item.querySelector('button').addEventListener('click', function(){
+    var willOpen = !item.classList.contains('open');
+    document.querySelectorAll('.faq.open').forEach(function(o){ o.classList.remove('open'); });
+    if (willOpen) item.classList.add('open');
+  });
+  faqList.appendChild(item);
+});
+
+/* ---- multi-step form ---- */
+var steps = document.querySelectorAll('.step');
+var current = 0;
+var formData = {};
+
+function showStep(i){
+  steps.forEach(function(s){ s.classList.remove('active'); });
+  steps[i].classList.add('active');
+  document.getElementById('progressBar').style.width = Math.round(((i+1)/steps.length)*100) + '%';
+  current = i;
+}
+function nextStep(){ if (current < steps.length - 1) showStep(current + 1); }
+function prevStep(){ if (current > 0) showStep(current - 1); }
+
+/* step 0: choice buttons */
+document.querySelectorAll('#applyForm .choice-list .choice').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var list = btn.parentElement;
+    list.querySelectorAll('.choice').forEach(function(b){ b.classList.remove('sel'); });
+    btn.classList.add('sel');
+    formData[list.getAttribute('data-field')] = btn.textContent;
+    track('form_step', {field: list.getAttribute('data-field'), value: btn.textContent});
+    setTimeout(nextStep, 200);
+  });
+});
+
+document.getElementById('applyForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var fd = new FormData(e.target);
+  fd.forEach(function(v,k){ formData[k] = v; });
+  track('form_submit', formData);
+  /* [PLACEHOLDER] Si quieres guardar/enviar estos datos (email, CRM, Google
+     Sheets, Zapier, etc.) es aquí donde harías el fetch() a tu backend. */
+  showStep(steps.length - 1);
+});
+
+/* ---- sticky bar visibility ---- */
+window.addEventListener('scroll', function(){
+  var y = window.scrollY;
+  var show = y > 600 && (window.innerHeight + y) < (document.body.scrollHeight - 420);
+  document.getElementById('stickyBar').classList.toggle('show', show);
+}, {passive:true});
+</script>
+
+</body>
+</html>
