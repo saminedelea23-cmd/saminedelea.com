@@ -1,0 +1,18 @@
+Guarda aquí tus fotos con estos nombres EXACTOS (minúsculas, sin espacios,
+formato .jpg o .png). En cuanto el nombre coincida, la foto aparece sola
+en la web — no hay que tocar el código.
+
+  hero.jpg          -> foto/fotograma de presentación (arriba de la web)
+  antes.jpg         -> tu foto de "antes"
+  despues.jpg       -> tu foto de "después"
+  testimonio-1.jpg  -> primera foto/captura de resultados
+  testimonio-2.jpg
+  testimonio-3.jpg
+  testimonio-4.jpg
+  testimonio-5.jpg
+  testimonio-6.jpg
+  testimonio-7.jpg
+  testimonio-8.jpg  -> hasta 8 (puedes usar menos: cambia RESULT_PHOTOS_COUNT
+                        dentro de index.html si quieres más o menos)
+
+Puedes borrar este archivo LEEME.txt cuando termines, no forma parte de la web.

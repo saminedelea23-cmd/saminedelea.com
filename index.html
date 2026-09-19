@@ -11,14 +11,22 @@
   ============================================================================
   GUÍA RÁPIDA DE EDICIÓN — léeme antes de publicar
   ============================================================================
-  1) FOTOS: busca los bloques marcados con [PLACEHOLDER] más abajo.
-     - Hero: reemplaza la imagen del bloque "hero-media" por tu foto/vídeo.
-     - Antes/Después: hay DOS fotos, una con badge "Antes" y otra "Después".
-     - Resultados: es una galería de fotos (capturas/testimonios), edita
-       RESULT_PHOTOS_COUNT en el <script> o sustituye directamente las tarjetas.
+  1) FOTOS — NO hace falta tocar código. Crea una carpeta llamada "images"
+     justo al lado de este archivo index.html, y guarda tus fotos ahí con
+     estos nombres EXACTOS (si el archivo no existe, se ve un hueco gris
+     de aviso; en cuanto lo guardes con el nombre correcto, aparece solo):
+       images/hero.jpg        → foto o fotograma de presentación (arriba)
+       images/antes.jpg       → tu foto de "antes"
+       images/despues.jpg     → tu foto de "después"
+       images/testimonio-1.jpg  a  images/testimonio-8.jpg → capturas/fotos
+       de resultados (si quieres más o menos, cambia RESULT_PHOTOS_COUNT
+       en el <script> de abajo).
+     Formato JPG o PNG, el nombre debe ser exacto (minúsculas, sin espacios).
   2) TEXTOS: todo lo que está entre [ ] corchetes es un ejemplo/placeholder que
-     debes reescribir con tu historia real. El resto del copy ya está listo
-     para usar tal cual, pero siéntete libre de ajustarlo a tu voz.
+     debes reescribir con tu historia real. Ábrelo con cualquier editor de
+     texto (recomendado: VS Code, gratis) y usa buscar (Ctrl+F) "[" para
+     encontrarlos uno a uno. El resto del copy ya está listo para usar tal
+     cual, pero siéntete libre de ajustarlo a tu voz.
   3) CALENDLY: busca CALENDLY_URL más abajo (aparece 2 veces) y pon tu enlace
      real de Calendly (créalo gratis en calendly.com). Mientras tanto el botón
      abre un aviso en vez de romper la página.
@@ -152,9 +160,13 @@
     margin-top:52px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;
   }
   .tcard{
-    aspect-ratio:1/1;border-radius:14px;background:var(--bg-soft);border:1px dashed var(--line);
-    display:flex;align-items:center;justify-content:center;color:var(--muted-2);font-size:12px;
-    text-align:center;padding:10px;
+    position:relative;aspect-ratio:1/1;border-radius:14px;background:var(--bg-soft);
+    border:1px dashed var(--line);overflow:hidden;
+  }
+  .tcard img{width:100%;height:100%;object-fit:cover;display:block}
+  .tcard-ph{
+    position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    color:var(--muted-2);font-size:12px;text-align:center;padding:10px;
   }
 
   /* ---------------- instagram ---------------- */
@@ -275,7 +287,8 @@
          Para vídeo: reemplaza esta <div> por un <iframe> de YouTube/Vimeo, o
          pega el embed de tu plataforma, manteniendo la clase "hero-media". -->
     <div class="hero-media" id="heroMedia" onclick="goToForm('hero_media')">
-      <img src="https://placehold.co/1120x630/f2f2f3/8a8a92?text=Sube+aqu%C3%ADi+tu+foto+o+v%C3%ADdeo+de+presentaci%C3%B3n" alt="Vídeo de presentación de Sami Nedelea" />
+      <img src="images/hero.jpg" alt="Vídeo de presentación de Sami Nedelea"
+        onerror="this.onerror=null;this.src='https://placehold.co/1120x630/161619/7c7c85?text=Guarda+tu+foto+como+images%2Fhero.jpg'" />
       <div class="play"><span>▶</span></div>
       <span class="ph-tag">[PLACEHOLDER] Foto o vídeo de presentación</span>
     </div>
@@ -315,11 +328,13 @@
         <div class="ba-photos">
           <div class="ba-photo">
             <span class="badge">Antes</span>
-            <img src="https://placehold.co/600x800/161619/7c7c85?text=Sube+aqu%C3%AD+tu+foto%0ADE+ANTES" alt="Foto de antes de Sami Nedelea" />
+            <img src="images/antes.jpg" alt="Foto de antes de Sami Nedelea"
+              onerror="this.onerror=null;this.src='https://placehold.co/600x800/161619/7c7c85?text=Guarda+tu+foto+como%0Aimages%2Fantes.jpg'" />
           </div>
           <div class="ba-photo">
             <span class="badge dark">Después</span>
-            <img src="https://placehold.co/600x800/161619/7c7c85?text=Sube+aqu%C3%AD+tu+foto%0ADE+DESPU%C3%89S" alt="Foto de después de Sami Nedelea" />
+            <img src="images/despues.jpg" alt="Foto de después de Sami Nedelea"
+              onerror="this.onerror=null;this.src='https://placehold.co/600x800/161619/7c7c85?text=Guarda+tu+foto+como%0Aimages%2Fdespues.jpg'" />
           </div>
         </div>
       </div>
@@ -524,11 +539,21 @@ function track(name, params){ try{ console.log('[track]', name, params); }catch(
 function goToForm(loc){ track('cta_click', {loc: loc}); document.getElementById('aplicar').scrollIntoView({behavior:'smooth'}); }
 
 /* ---- testimonial grid ---- */
+/* Cada tarjeta busca images/testimonio-N.jpg. Si no existe, se ve un aviso
+   en su lugar; en cuanto guardes el archivo con ese nombre, aparece solo. */
 var tgrid = document.getElementById('tgrid');
 for (var i = 1; i <= RESULT_PHOTOS_COUNT; i++){
   var c = document.createElement('div');
   c.className = 'tcard';
-  c.textContent = '📷 Testimonio ' + i;
+  var img = document.createElement('img');
+  img.src = 'images/testimonio-' + i + '.jpg';
+  img.alt = 'Testimonio ' + i;
+  var ph = document.createElement('span');
+  ph.className = 'tcard-ph';
+  ph.textContent = '📷 images/testimonio-' + i + '.jpg';
+  img.onerror = function(phEl){ return function(){ this.style.display = 'none'; phEl.style.display = 'flex'; }; }(ph);
+  c.appendChild(img);
+  c.appendChild(ph);
   tgrid.appendChild(c);
 }
 
