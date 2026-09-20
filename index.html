@@ -15,8 +15,9 @@
      justo al lado de este archivo index.html, y guarda tus fotos ahí con
      estos nombres EXACTOS (si el archivo no existe, se ve un hueco gris
      de aviso; en cuanto lo guardes con el nombre correcto, aparece solo):
-       images/hero.jpg        → foto o fotograma de presentación (arriba)
+       images/hero.jpg        → foto de presentación (arriba)
        images/antes.jpg       → tu foto de "antes"
+       images/examen.jpg      → foto del examen
        images/despues.jpg     → tu foto de "después"
        images/testimonio-1.jpg  a  images/testimonio-8.jpg → capturas/fotos
        de resultados (si quieres más o menos, cambia RESULT_PHOTOS_COUNT
@@ -132,13 +133,17 @@
 
   /* ---------------- story / antes-después ---------------- */
   .story{display:grid;grid-template-columns:1fr;gap:44px;align-items:center}
-  .ba-photos{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-  @media (max-width:520px){ .ba-photos{gap:10px} }
+  .ba-photos{
+    display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+    gap:14px;aspect-ratio:4/5;
+  }
   .ba-photo{
     position:relative;border-radius:20px;overflow:hidden;
     border:1px solid var(--line);background:var(--bg-soft);
-    aspect-ratio:3/4;
   }
+  .ba-photo.ba-antes{grid-column:1;grid-row:1}
+  .ba-photo.ba-examen{grid-column:1;grid-row:2}
+  .ba-photo.ba-despues{grid-column:2;grid-row:1 / span 2}
   .ba-photo img{width:100%;height:100%;object-fit:cover}
   .ba-photo .badge{
     position:absolute;top:14px;left:14px;background:#ffffff;color:#0a0a0b;
@@ -147,12 +152,11 @@
     text-transform:uppercase;
   }
   .ba-photo .badge.dark{background:#0a0a0b;color:#ffffff;border-color:rgba(255,255,255,.2)}
-  .ba-row{display:flex;gap:10px;margin:22px 0 6px}
-  .ba-pill{
-    flex:1;border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--bg-soft)
+  @media (max-width:640px){
+    .ba-photos{grid-template-columns:1fr;grid-template-rows:none;aspect-ratio:auto;gap:10px}
+    .ba-photo{aspect-ratio:4/3}
+    .ba-photo.ba-antes,.ba-photo.ba-examen,.ba-photo.ba-despues{grid-column:1;grid-row:auto}
   }
-  .ba-pill b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2);margin-bottom:4px}
-  .ba-pill p{margin:0;font-size:14.5px;color:var(--ink)}
   .cta-row{margin-top:26px}
 
   /* ---------------- results ---------------- */
@@ -275,22 +279,17 @@
 
   <!-- ============================== HERO ============================== -->
   <section class="hero wrap">
-    <span class="kicker"><span class="dot"></span> Llamada estratégica gratuita</span>
+    <span class="kicker"><span class="dot"></span> ECOMMERCE + IA</span>
     <h1 class="display">
-      [Aprende cómo pasé de <span class="accent">0 a construir mi propio negocio digital</span> — y cómo puedes empezar tú también]
+      Aprende cómo pasé de <span class="accent">0 a hacer +5 cifras al mes con IA Dropshipping</span>
     </h1>
     <p class="sub">
-      [Sustituye este subtítulo por una frase de 1-2 líneas: qué prometes, para quién es y qué consigue la persona al reservar la llamada.]
+      Mira mi clase gratuita y agenda una llamada con mi equipo para valorar tu situación y saber si realmente podemos ayudarte.
     </p>
 
-    <!-- [PLACEHOLDER] HERO — imagen o vídeo de presentación.
-         Para vídeo: reemplaza esta <div> por un <iframe> de YouTube/Vimeo, o
-         pega el embed de tu plataforma, manteniendo la clase "hero-media". -->
     <div class="hero-media" id="heroMedia" onclick="goToForm('hero_media')">
-      <img src="images/hero.jpg" alt="Vídeo de presentación de Sami Nedelea"
+      <img src="images/hero.jpg" alt="Sami Nedelea"
         onerror="this.onerror=null;this.src='https://placehold.co/1120x630/161619/7c7c85?text=Guarda+tu+foto+como+images%2Fhero.jpg'" />
-      <div class="play"><span>▶</span></div>
-      <span class="ph-tag">[PLACEHOLDER] Foto o vídeo de presentación</span>
     </div>
 
     <div class="cta-row" style="margin-top:34px">
@@ -305,33 +304,24 @@
     <div class="wrap">
       <div class="story">
         <div>
-          <h2 class="display">De <span class="accent">[tu punto de partida]</span> a [tu logro actual]</h2>
-          <div class="ba-row">
-            <div class="ba-pill">
-              <b>Antes</b>
-              <p>[Describe en 1-2 frases cómo era tu situación antes: qué te frustraba, qué te faltaba, dónde estabas.]</p>
-            </div>
-            <div class="ba-pill">
-              <b>Después</b>
-              <p>[Describe en 1-2 frases cómo es tu situación ahora: qué lograste, qué cambió, qué resultado obtuviste.]</p>
-            </div>
-          </div>
-          <p style="margin-top:18px;color:var(--muted)">
-            [Añade un párrafo breve contando tu historia con más contexto: cuándo empezaste, qué obstáculo superaste y por qué decidiste enseñar esto a otras personas. 3-4 frases es suficiente.]
-          </p>
+          <h2 class="display">De <span class="accent">estar totalmente perdido</span> a ser libre</h2>
           <div class="cta-row">
             <a href="#aplicar" class="btn" onclick="track('cta_click',{loc:'story'})">Quiero mi transformación <span class="arrow">↓</span></a>
           </div>
         </div>
 
-        <!-- [PLACEHOLDER] Dos fotos: una de "antes" y otra de "después" -->
         <div class="ba-photos">
-          <div class="ba-photo">
+          <div class="ba-photo ba-antes">
             <span class="badge">Antes</span>
             <img src="images/antes.jpg" alt="Foto de antes de Sami Nedelea"
               onerror="this.onerror=null;this.src='https://placehold.co/600x800/161619/7c7c85?text=Guarda+tu+foto+como%0Aimages%2Fantes.jpg'" />
           </div>
-          <div class="ba-photo">
+          <div class="ba-photo ba-examen">
+            <span class="badge">Examen</span>
+            <img src="images/examen.jpg" alt="Examen de Sami Nedelea"
+              onerror="this.onerror=null;this.src='https://placehold.co/600x800/161619/7c7c85?text=Guarda+tu+foto+como%0Aimages%2Fexamen.jpg'" />
+          </div>
+          <div class="ba-photo ba-despues">
             <span class="badge dark">Después</span>
             <img src="images/despues.jpg" alt="Foto de después de Sami Nedelea"
               onerror="this.onerror=null;this.src='https://placehold.co/600x800/161619/7c7c85?text=Guarda+tu+foto+como%0Aimages%2Fdespues.jpg'" />
@@ -345,8 +335,7 @@
   <section class="block" style="background:var(--bg-soft)">
     <div class="wrap">
       <div class="head">
-        <h2 class="display">Resultados reales</h2>
-        <p class="lede">[Sustituye por: "Estos son algunos de los resultados que han conseguido las personas con las que he trabajado."]</p>
+        <h2 class="display">Algunos resultados de mis alumnos</h2>
       </div>
 
       <!-- [PLACEHOLDER] Galería de fotos/capturas de resultados -->
@@ -364,7 +353,7 @@
       <div class="ig">
         <h2 class="display" style="font-size:clamp(26px,4vw,42px)">Mira más resultados</h2>
         <p class="lede">
-          [Ajusta este texto]: En mis historias destacadas de Instagram <span class="handle">@saminedelea_</span> encontrarás más casos reales y contenido de valor.
+          En mis historias destacadas de Instagram <span class="handle">@saminedelea_</span> encontrarás más resultados
         </p>
         <a class="btn btn--ghost" href="https://www.instagram.com/saminedelea_/" target="_blank" rel="noreferrer">
           Ver Instagram @saminedelea_
@@ -373,32 +362,6 @@
     </div>
   </section>
 
-  <!-- ============================= GARANTÍA ============================= -->
-  <section class="block">
-    <div class="wrap">
-      <div class="guar">
-        <div class="seal">100%<br/>GRATIS</div>
-        <h2 class="display">Cero riesgo. Solo una conversación.</h2>
-        <p>
-          [Ajusta este texto]: La llamada es 100% gratuita, sin compromiso y sin presión de venta. Es una conversación para entender tu situación y ver si puedo ayudarte a conseguir tu objetivo.
-        </p>
-        <div class="trust-row">
-          <span class="t"><span class="c">✓</span> Sin tarjeta de crédito</span>
-          <span class="t"><span class="c">✓</span> 100% personalizada</span>
-          <span class="t"><span class="c">✓</span> Plazas limitadas cada semana</span>
-          <span class="t"><span class="c">✓</span> Cero compromiso</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================================ FAQ ================================ -->
-  <section class="block">
-    <div class="wrap">
-      <div class="head"><h2 class="display">Preguntas frecuentes</h2></div>
-      <div class="faq-list" id="faqList"></div>
-    </div>
-  </section>
 
   <!-- ============================ FORMULARIO ============================ -->
   <section class="block" id="aplicar" style="background:var(--bg-soft)">
@@ -524,15 +487,6 @@ document.getElementById('calendlyBtn').addEventListener('click', function(e){
 /* [PLACEHOLDER] Número de capturas/fotos de testimonios a mostrar en la galería */
 var RESULT_PHOTOS_COUNT = 8;
 
-/* [PLACEHOLDER] Preguntas frecuentes — edita a tu gusto */
-var FAQS = [
-  { q: "¿La llamada es realmente gratis?", a: "Sí, 100%. No necesitas tarjeta ni pagas nada por la llamada. Es una conversación para entender tu situación y ver si puedo ayudarte." },
-  { q: "¿Necesito experiencia previa?", a: "[Edita esta respuesta según tu programa/servicio.]" },
-  { q: "¿Cuánto dura la llamada?", a: "[Edita: ej. 'Entre 20 y 30 minutos.']" },
-  { q: "¿Qué pasa después de la llamada?", a: "[Edita: explica qué ocurre si encajáis — siguiente paso, propuesta, etc.]" },
-  { q: "¿Funciona sin importar dónde vivo?", a: "[Edita según tu servicio: online/presencial, países, etc.]" }
-];
-
 /* ====================== fin config ====================== */
 
 function track(name, params){ try{ console.log('[track]', name, params); }catch(e){} }
@@ -556,21 +510,6 @@ for (var i = 1; i <= RESULT_PHOTOS_COUNT; i++){
   c.appendChild(ph);
   tgrid.appendChild(c);
 }
-
-/* ---- FAQ ---- */
-var faqList = document.getElementById('faqList');
-FAQS.forEach(function(f, i){
-  var item = document.createElement('div');
-  item.className = 'faq';
-  item.innerHTML = '<button type="button"><span>' + f.q + '</span><span class="q-ico">+</span></button>' +
-                    '<div class="a"><p>' + f.a + '</p></div>';
-  item.querySelector('button').addEventListener('click', function(){
-    var willOpen = !item.classList.contains('open');
-    document.querySelectorAll('.faq.open').forEach(function(o){ o.classList.remove('open'); });
-    if (willOpen) item.classList.add('open');
-  });
-  faqList.appendChild(item);
-});
 
 /* ---- multi-step form ---- */
 var steps = document.querySelectorAll('.step');
