@@ -17,7 +17,6 @@
      de aviso; en cuanto lo guardes con el nombre correcto, aparece solo):
        images/hero.jpg        → foto de presentación (arriba)
        images/antes.jpg       → tu foto de "antes"
-       images/examen.jpg      → foto del examen
        images/despues.jpg     → tu foto de "después"
        images/testimonio-1.jpg  a  images/testimonio-8.jpg → capturas/fotos
        de resultados (si quieres más o menos, cambia RESULT_PHOTOS_COUNT
@@ -133,18 +132,21 @@
 
   /* ---------------- story / antes-después ---------------- */
   .story{display:grid;grid-template-columns:1fr;gap:44px;align-items:center}
-  .ba-photos{
-    display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
-    gap:14px;aspect-ratio:4/5;
-  }
+  .ba-photos{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:center}
   .ba-photo{
     position:relative;border-radius:20px;overflow:hidden;
     border:1px solid var(--line);background:var(--bg-soft);
+    aspect-ratio:4/3;
   }
-  .ba-photo.ba-antes{grid-column:1;grid-row:1}
-  .ba-photo.ba-examen{grid-column:1;grid-row:2}
-  .ba-photo.ba-despues{grid-column:2;grid-row:1 / span 2}
-  .ba-photo img{width:100%;height:100%;object-fit:cover}
+  .ba-photo img{
+    width:100%;height:100%;object-fit:contain;pointer-events:none;
+    -webkit-touch-callout:none;-webkit-user-select:none;user-select:none;
+  }
+  .ba-arrow{
+    display:flex;align-items:center;justify-content:center;flex:none;
+    width:40px;height:40px;border-radius:999px;background:var(--red);color:#0a0a0b;
+    font-size:18px;font-weight:900;
+  }
   .ba-photo .badge{
     position:absolute;top:14px;left:14px;background:#ffffff;color:#0a0a0b;
     border:1px solid var(--line);
@@ -153,9 +155,8 @@
   }
   .ba-photo .badge.dark{background:#0a0a0b;color:#ffffff;border-color:rgba(255,255,255,.2)}
   @media (max-width:640px){
-    .ba-photos{grid-template-columns:1fr;grid-template-rows:none;aspect-ratio:auto;gap:10px}
-    .ba-photo{aspect-ratio:4/3}
-    .ba-photo.ba-antes,.ba-photo.ba-examen,.ba-photo.ba-despues{grid-column:1;grid-row:auto}
+    .ba-photos{grid-template-columns:1fr;gap:12px}
+    .ba-arrow{transform:rotate(90deg);margin:0 auto}
   }
   .cta-row{margin-top:26px}
 
@@ -215,23 +216,50 @@
     background:var(--bg-soft);border:1px solid var(--line);border-radius:24px;
     padding:52px 28px;max-width:640px;margin:0 auto;
   }
-  .apply-progress{height:5px;background:var(--line);border-radius:999px;overflow:hidden;margin-bottom:34px}
-  .apply-progress i{display:block;height:100%;background:var(--ink);border-radius:999px;transition:width .3s ease}
+  .steps-nav{display:flex;align-items:flex-start;justify-content:center;margin-bottom:38px}
+  .steps-nav .node{display:flex;flex-direction:column;align-items:center;gap:8px;flex:none;width:100px}
+  .steps-nav .dot{
+    width:36px;height:36px;border-radius:999px;border:2px solid var(--line);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;
+    color:var(--muted);background:var(--bg-soft);transition:all .2s ease;
+  }
+  .steps-nav .node.active .dot,.steps-nav .node.done .dot{background:var(--red);border-color:var(--red);color:#0a0a0b}
+  .steps-nav .node .label{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-2);text-align:center}
+  .steps-nav .node.active .label{color:var(--ink)}
+  .steps-nav .line{flex:1;height:2px;background:var(--line);margin-top:18px;min-width:16px;transition:background .2s ease}
+  .steps-nav .line.done{background:var(--red)}
   .step-q{font-family:var(--font-display);font-weight:800;font-size:24px;margin-bottom:6px}
   .step-hint{color:var(--muted);font-size:14px;margin-bottom:24px}
+  .field-label{display:block;font-weight:700;font-size:14px;margin-bottom:8px;color:var(--ink)}
+  .q-label{
+    font-family:var(--font-display);font-weight:800;font-size:12.5px;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--ink);margin:26px 0 12px;
+  }
+  .q-label:first-child{margin-top:0}
   .field{
     width:100%;padding:16px 18px;border:1.5px solid var(--line);border-radius:12px;
     font-size:16px;font-family:inherit;background:#fff;color:#0a0a0b;
   }
   .field:focus{outline:none;border-color:#0a0a0b}
-  textarea.field{min-height:120px;resize:vertical}
+  textarea.field{min-height:100px;resize:vertical}
+  select.field{cursor:pointer}
+  .whatsapp-row{display:flex;gap:10px}
+  .whatsapp-row select.field{flex:none;width:98px;padding-left:10px;padding-right:6px}
+  .whatsapp-row input.field{flex:1}
   .choice-list{display:flex;flex-direction:column;gap:10px}
-  .choice{
+  .choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:480px){ .choice-grid{grid-template-columns:1fr} }
+  .choice,.choice2{
     width:100%;text-align:left;padding:16px 18px;border:1.5px solid var(--line);border-radius:12px;
     background:#fff;color:#0a0a0b;font-size:15.5px;cursor:pointer;font-family:inherit;
   }
-  .choice:hover{border-color:#0a0a0b}
+  .choice2{display:flex;align-items:center;gap:10px;font-size:14.5px}
+  .choice2 .radio{width:17px;height:17px;border-radius:999px;border:2px solid #c7c7cc;flex:none;position:relative}
+  .choice:hover,.choice2:hover{border-color:#0a0a0b}
   .choice.sel{border-color:#0a0a0b;background:#0a0a0b;color:#fff;font-weight:700}
+  .choice2.sel{border-color:var(--red)}
+  .choice2.sel .radio{border-color:var(--red)}
+  .choice2.sel .radio::after{content:'';position:absolute;inset:3px;border-radius:999px;background:var(--red)}
   .step-actions{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
   .link-back{background:none;border:0;color:var(--muted);cursor:pointer;font-size:14px;padding:8px}
   .step{display:none}
@@ -311,20 +339,16 @@
         </div>
 
         <div class="ba-photos">
-          <div class="ba-photo ba-antes">
+          <div class="ba-photo" oncontextmenu="return false">
             <span class="badge">Antes</span>
-            <img src="images/antes.jpg" alt="Foto de antes de Sami Nedelea"
-              onerror="this.onerror=null;this.src='https://placehold.co/600x800/161619/7c7c85?text=Guarda+tu+foto+como%0Aimages%2Fantes.jpg'" />
+            <img src="images/antes.jpg" alt="Foto de antes de Sami Nedelea" draggable="false"
+              onerror="this.onerror=null;this.src='https://placehold.co/800x600/161619/7c7c85?text=Guarda+tu+foto+como%0Aimages%2Fantes.jpg'" />
           </div>
-          <div class="ba-photo ba-examen">
-            <span class="badge">Examen</span>
-            <img src="images/examen.jpg" alt="Examen de Sami Nedelea"
-              onerror="this.onerror=null;this.src='https://placehold.co/600x800/161619/7c7c85?text=Guarda+tu+foto+como%0Aimages%2Fexamen.jpg'" />
-          </div>
-          <div class="ba-photo ba-despues">
+          <div class="ba-arrow" aria-hidden="true">→</div>
+          <div class="ba-photo" oncontextmenu="return false">
             <span class="badge dark">Después</span>
-            <img src="images/despues.jpg" alt="Foto de después de Sami Nedelea"
-              onerror="this.onerror=null;this.src='https://placehold.co/600x800/161619/7c7c85?text=Guarda+tu+foto+como%0Aimages%2Fdespues.jpg'" />
+            <img src="images/despues.jpg" alt="Foto de después de Sami Nedelea" draggable="false"
+              onerror="this.onerror=null;this.src='https://placehold.co/800x600/161619/7c7c85?text=Guarda+tu+foto+como%0Aimages%2Fdespues.jpg'" />
           </div>
         </div>
       </div>
@@ -368,64 +392,93 @@
     <div class="wrap">
       <div class="head">
         <h2 class="display">Agenda tu llamada gratuita</h2>
-        <p class="lede">Responde estas preguntas rápidas para reservar tu hueco.</p>
+        <p class="lede">Recibe la clase gratis ahora y empieza hoy mismo.</p>
       </div>
 
       <div class="apply">
-        <div class="apply-progress"><i id="progressBar" style="width:16%"></i></div>
-        <form id="applyForm">
+        <div class="steps-nav" id="stepsNav">
+          <div class="node" data-step="0"><span class="dot">1</span><span class="label">Tus datos</span></div>
+          <div class="line" data-line="0"></div>
+          <div class="node" data-step="1"><span class="dot">2</span><span class="label">Tu situación</span></div>
+          <div class="line" data-line="1"></div>
+          <div class="node" data-step="2"><span class="dot">3</span><span class="label">Acceder</span></div>
+        </div>
 
+        <form id="applyForm" onsubmit="return false">
+
+          <!-- STEP 0: TUS DATOS -->
           <div class="step active" data-step="0">
-            <div class="step-q">¿Cuándo te gustaría empezar?</div>
-            <div class="step-hint">Si la llamada confirma que puedo ayudarte.</div>
-            <div class="choice-list" data-field="disponible">
-              <button type="button" class="choice">Ahora mismo</button>
-              <button type="button" class="choice">Esta semana</button>
-              <button type="button" class="choice">Aún no lo sé</button>
-            </div>
-          </div>
+            <label class="field-label" for="fNombre">Nombre</label>
+            <input class="field" id="fNombre" type="text" name="nombre" placeholder="Tu nombre y apellido" required />
 
-          <div class="step" data-step="1">
-            <div class="step-q">¿Cómo te llamas?</div>
-            <div class="step-hint">Tu nombre y apellido.</div>
-            <input class="field" type="text" name="nombre" placeholder="Escribe tu nombre aquí…" required />
-            <div class="step-actions">
-              <button type="button" class="link-back" onclick="prevStep()">← Volver</button>
-              <button type="button" class="btn" onclick="nextStep()">Continuar</button>
-            </div>
-          </div>
-
-          <div class="step" data-step="2">
-            <div class="step-q">¿A qué email te confirmo la llamada?</div>
-            <div class="step-hint">Revisa que esté bien escrito.</div>
+            <div class="q-label">Email</div>
             <input class="field" type="email" name="email" placeholder="tunombre@email.com" required />
-            <div class="step-actions">
-              <button type="button" class="link-back" onclick="prevStep()">← Volver</button>
-              <button type="button" class="btn" onclick="nextStep()">Continuar</button>
+
+            <div class="q-label">WhatsApp</div>
+            <div class="whatsapp-row">
+              <select class="field" name="prefijo">
+                <option value="+34">ES +34</option>
+                <option value="+52">MX +52</option>
+                <option value="+54">AR +54</option>
+                <option value="+57">CO +57</option>
+                <option value="+56">CL +56</option>
+                <option value="+51">PE +51</option>
+                <option value="+593">EC +593</option>
+                <option value="+58">VE +58</option>
+                <option value="+1">US/DO +1</option>
+              </select>
+              <input class="field" type="tel" name="telefono" placeholder="600 000 000" required />
+            </div>
+
+            <div class="step-actions" style="justify-content:flex-end">
+              <button type="button" class="btn" onclick="nextStep()">Continuar <span class="arrow">→</span></button>
             </div>
           </div>
 
-          <div class="step" data-step="3">
-            <div class="step-q">Cuéntame tu situación actual</div>
-            <div class="step-hint">¿Qué te gustaría conseguir? Sé honesto/a, esto lo leo yo.</div>
-            <textarea class="field" name="situacion" placeholder="Cuéntame tu situación y qué quieres conseguir…"></textarea>
+          <!-- STEP 1: TU SITUACIÓN -->
+          <div class="step" data-step="1">
+            <div class="q-label">¿Cuál es tu rango de edad?</div>
+            <div class="choice-grid" data-field="edad">
+              <button type="button" class="choice2"><span class="radio"></span>Menor de 18</button>
+              <button type="button" class="choice2"><span class="radio"></span>Entre 18 y 25</button>
+              <button type="button" class="choice2"><span class="radio"></span>Más de 25</button>
+            </div>
+
+            <div class="q-label">¿Cuánto estás generando actualmente?</div>
+            <div class="choice-grid" data-field="ingresos">
+              <button type="button" class="choice2"><span class="radio"></span>0€</button>
+              <button type="button" class="choice2"><span class="radio"></span>1 – 1.000€/mes</button>
+              <button type="button" class="choice2"><span class="radio"></span>1.000 – 3.000€/mes</button>
+              <button type="button" class="choice2"><span class="radio"></span>3.000 – 5.000€/mes</button>
+              <button type="button" class="choice2"><span class="radio"></span>+5.000€/mes</button>
+            </div>
+
+            <div class="q-label">¿A qué te dedicas actualmente?</div>
+            <div class="choice-grid" data-field="ocupacion">
+              <button type="button" class="choice2"><span class="radio"></span>Estudiante</button>
+              <button type="button" class="choice2"><span class="radio"></span>Empleado</button>
+              <button type="button" class="choice2"><span class="radio"></span>Tengo un negocio</button>
+              <button type="button" class="choice2"><span class="radio"></span>No hago nada</button>
+            </div>
+
+            <div class="q-label">¿Cuándo estarías disponible para empezar?</div>
+            <div class="choice-grid" data-field="disponible">
+              <button type="button" class="choice2"><span class="radio"></span>Ahora mismo</button>
+              <button type="button" class="choice2"><span class="radio"></span>Esta semana</button>
+              <button type="button" class="choice2"><span class="radio"></span>No lo sé porque no sé tomar decisiones</button>
+            </div>
+
+            <div class="q-label">¿Por qué quieres empezar en el programa?</div>
+            <textarea class="field" name="situacion" placeholder="Sé honesto. Esto lo leo yo."></textarea>
+
             <div class="step-actions">
               <button type="button" class="link-back" onclick="prevStep()">← Volver</button>
-              <button type="button" class="btn" onclick="nextStep()">Continuar</button>
+              <button type="button" class="btn" onclick="nextStep()">Continuar <span class="arrow">→</span></button>
             </div>
           </div>
 
-          <div class="step" data-step="4">
-            <div class="step-q">Por último, ¿tu teléfono?</div>
-            <div class="step-hint">Por si necesito contactarte sobre tu llamada.</div>
-            <input class="field" type="tel" name="telefono" placeholder="+34 600 000 000" required />
-            <div class="step-actions">
-              <button type="button" class="link-back" onclick="prevStep()">← Volver</button>
-              <button type="submit" class="btn">Ver horarios disponibles</button>
-            </div>
-          </div>
-
-          <div class="step" data-step="5">
+          <!-- STEP 2: ACCEDER -->
+          <div class="step" data-step="2">
             <div class="success">
               <div class="check">✓</div>
               <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:8px">¡Ya casi está!</h3>
@@ -516,35 +569,57 @@ var steps = document.querySelectorAll('.step');
 var current = 0;
 var formData = {};
 
+function updateStepsNav(i){
+  document.querySelectorAll('#stepsNav .node').forEach(function(n){
+    var idx = parseInt(n.getAttribute('data-step'), 10);
+    n.classList.remove('active', 'done');
+    var dot = n.querySelector('.dot');
+    if (idx < i){ n.classList.add('done'); dot.textContent = '✓'; }
+    else { dot.textContent = idx + 1; if (idx === i) n.classList.add('active'); }
+  });
+  document.querySelectorAll('#stepsNav .line').forEach(function(l){
+    var idx = parseInt(l.getAttribute('data-line'), 10);
+    l.classList.toggle('done', idx < i);
+  });
+}
 function showStep(i){
   steps.forEach(function(s){ s.classList.remove('active'); });
   steps[i].classList.add('active');
-  document.getElementById('progressBar').style.width = Math.round(((i+1)/steps.length)*100) + '%';
+  updateStepsNav(i);
   current = i;
 }
-function nextStep(){ if (current < steps.length - 1) showStep(current + 1); }
+/* Solo valida los campos visibles del paso actual (nombre/email/whatsapp en
+   el paso 0); los grupos de elección no son obligatorios para poder avanzar. */
+function stepIsValid(stepEl){
+  var invalid = stepEl.querySelectorAll(':invalid');
+  if (invalid.length){ invalid[0].reportValidity(); return false; }
+  return true;
+}
+function syncFormData(){
+  var fd = new FormData(document.getElementById('applyForm'));
+  fd.forEach(function(v, k){ formData[k] = v; });
+}
+function nextStep(){
+  if (!stepIsValid(steps[current])) return;
+  syncFormData();
+  if (current === steps.length - 2){ track('form_submit', formData); }
+  if (current < steps.length - 1) showStep(current + 1);
+}
 function prevStep(){ if (current > 0) showStep(current - 1); }
+updateStepsNav(0);
 
-/* step 0: choice buttons */
-document.querySelectorAll('#applyForm .choice-list .choice').forEach(function(btn){
-  btn.addEventListener('click', function(){
-    var list = btn.parentElement;
-    list.querySelectorAll('.choice').forEach(function(b){ b.classList.remove('sel'); });
-    btn.classList.add('sel');
-    formData[list.getAttribute('data-field')] = btn.textContent;
-    track('form_step', {field: list.getAttribute('data-field'), value: btn.textContent});
-    setTimeout(nextStep, 200);
+/* grupos de selección única (varios por paso) */
+document.querySelectorAll('#applyForm .choice-grid, #applyForm .choice-list').forEach(function(group){
+  group.querySelectorAll('.choice, .choice2').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      group.querySelectorAll('.choice, .choice2').forEach(function(b){ b.classList.remove('sel'); });
+      btn.classList.add('sel');
+      var field = group.getAttribute('data-field');
+      var value = btn.textContent.trim();
+      formData[field] = value;
+      track('form_step', {field: field, value: value});
+    });
   });
-});
-
-document.getElementById('applyForm').addEventListener('submit', function(e){
-  e.preventDefault();
-  var fd = new FormData(e.target);
-  fd.forEach(function(v,k){ formData[k] = v; });
-  track('form_submit', formData);
-  /* [PLACEHOLDER] Si quieres guardar/enviar estos datos (email, CRM, Google
-     Sheets, Zapier, etc.) es aquí donde harías el fetch() a tu backend. */
-  showStep(steps.length - 1);
 });
 
 /* ---- sticky bar visibility ---- */
