@@ -1,0 +1,72 @@
+============================================================================
+ CONECTAR EL FORMULARIO A GOOGLE SHEETS (tu "CRM" gratuito)
+============================================================================
+Cada vez que alguien complete el formulario de la web (nombre, email,
+WhatsApp, edad, ingresos, capital, ocupación, disponibilidad y su
+respuesta), aparecerá como una fila nueva en una hoja de cálculo tuya.
+No necesitas darme acceso a tu cuenta de Google en ningún momento.
+
+PASO 1 — Crea la hoja
+----------------------
+1. Ve a sheets.google.com y crea una hoja nueva en blanco.
+2. Ponle el nombre que quieras, por ejemplo "Leads Sami Nedelea".
+
+PASO 2 — Pega el script
+------------------------
+1. Dentro de la hoja, ve a Extensiones → Apps Script.
+2. Borra todo lo que haya en el editor y pega esto tal cual:
+
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(['Fecha', 'Nombre', 'Email', 'WhatsApp', 'Edad',
+      'Ingresos actuales', 'Capital a invertir', 'Ocupación',
+      'Disponibilidad', 'Por qué quiere empezar']);
+  }
+  var data = JSON.parse(e.postData.contents);
+  sheet.appendRow([
+    new Date(),
+    data.nombre || '',
+    data.email || '',
+    (data.prefijo || '') + ' ' + (data.telefono || ''),
+    data.edad || '',
+    data.ingresos || '',
+    data.capital || '',
+    data.ocupacion || '',
+    data.disponible || '',
+    data.situacion || ''
+  ]);
+  return ContentService.createTextOutput(JSON.stringify({ ok: true }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+3. Arriba, dale un nombre al proyecto (ej. "Formulario web") y guarda
+   (icono de disquete o Ctrl+S).
+
+PASO 3 — Publícalo como "Aplicación web"
+------------------------------------------
+1. Botón azul "Implementar" (arriba a la derecha) → "Nueva implementación".
+2. En "Seleccionar tipo" pulsa el engranaje ⚙ y elige "Aplicación web".
+3. Configura:
+     - Descripción: lo que quieras.
+     - Ejecutar como: Yo (tu cuenta).
+     - Quién tiene acceso: Cualquier usuario.
+   (Esto es necesario para que la web pueda enviar datos; nadie puede leer
+   tu hoja desde ahí, solo añadir filas a través del formulario.)
+4. Pulsa "Implementar". Google te pedirá autorizar el script la primera
+   vez — dale permiso (es tu propio script, es seguro).
+5. Te dará una URL que termina en "/exec". Cópiala entera.
+
+PASO 4 — Pégamela a mí, o ponla tú misma
+-------------------------------------------
+Mándame esa URL y yo la pongo, o edítala tú directamente: abre index.html
+con un editor de texto, busca "GOOGLE_SHEETS_URL" (cerca del final) y
+sustituye el valor de ejemplo por tu URL real, entre comillas.
+
+Hasta que no pongas esa URL, el formulario sigue funcionando con
+normalidad pero no envía nada a ningún sitio (solo lo verías en la consola
+del navegador, F12, si abrieras esa pestaña).
+
+¿Quieres editar la hoja más adelante, añadir columnas, cambiar colores,
+poner filtros? Es una hoja de cálculo normal tuya — haz lo que quieras,
+el script solo añade filas al final.

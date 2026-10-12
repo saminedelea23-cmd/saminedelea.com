@@ -31,7 +31,11 @@
      real de Calendly (créalo gratis en calendly.com). Mientras tanto el botón
      abre un aviso en vez de romper la página.
   4) INSTAGRAM: ya está enlazado a @saminedelea_.
-  5) DOMINIO: una vez tengas index.html en tu hosting (Netlify, Vercel, GitHub
+  5) CRM (Google Sheets): cada envío del formulario puede guardarse solo
+     como fila en una hoja de cálculo tuya. Sigue los pasos de
+     CRM-SETUP.txt (en la misma carpeta) y luego pon tu URL en
+     GOOGLE_SHEETS_URL, más abajo en este archivo.
+  6) DOMINIO: una vez tengas index.html en tu hosting (Netlify, Vercel, GitHub
      Pages...) conecta saminedelea.com desde el panel de tu registrador
      (registros A/CNAME). Pregúntame cuando lo tengas y te ayudo con eso.
   ============================================================================
@@ -566,6 +570,12 @@ var RESULT_PHOTOS_COUNT = 4;
 /* Número de filas del carrusel (se reparten las fotos entre ellas) */
 var RESULT_ROWS = 2;
 
+// [PLACEHOLDER] CRM — URL de tu Google Apps Script (ver images/LEEME.txt para
+// los pasos). Mientras tenga el texto "TU-SCRIPT-ID" no se envía nada y solo
+// se guarda en la consola del navegador (F12) para que puedas probar la web
+// sin perder ningún dato.
+var GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/TU-SCRIPT-ID/exec";
+
 /* ====================== fin config ====================== */
 
 function track(name, params){ try{ console.log('[track]', name, params); }catch(e){} }
@@ -656,10 +666,28 @@ function syncFormData(){
   var fd = new FormData(document.getElementById('applyForm'));
   fd.forEach(function(v, k){ formData[k] = v; });
 }
+/* Envía los datos del formulario a tu Google Sheet (ver GOOGLE_SHEETS_URL
+   arriba). mode:'no-cors' + Content-Type text/plain evitan el aviso previo
+   (preflight) que Apps Script no sabe responder; aun así el envío llega. */
+function sendToSheets(data){
+  if (GOOGLE_SHEETS_URL.indexOf('TU-SCRIPT-ID') !== -1){
+    console.log('[sheets] URL sin configurar, no se envía. Datos:', data);
+    return;
+  }
+  fetch(GOOGLE_SHEETS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'text/plain'},
+    body: JSON.stringify(data)
+  }).catch(function(e){ console.error('[sheets] error de envío', e); });
+}
 function nextStep(){
   if (!stepIsValid(steps[current])) return;
   syncFormData();
-  if (current === steps.length - 2){ track('form_submit', formData); }
+  if (current === steps.length - 2){
+    track('form_submit', formData);
+    sendToSheets(formData);
+  }
   if (current < steps.length - 1) showStep(current + 1);
 }
 function prevStep(){ if (current > 0) showStep(current - 1); }
