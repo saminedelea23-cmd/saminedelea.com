@@ -21,7 +21,11 @@
        images/testimonio-1.jpg  a  images/testimonio-4.jpg → capturas/fotos
        de resultados, se mueven solas en un carrusel (si quieres más o
        menos, cambia RESULT_PHOTOS_COUNT en el <script> de abajo).
-     Formato JPG o PNG, el nombre debe ser exacto (minúsculas, sin espacios).
+       images/resultado-video-1.mp4 → vídeo de resultado, va mezclado con
+       las fotos del carrusel y se abre a pantalla completa al pincharlo
+       (añade más editando RESULT_VIDEOS en el <script> de abajo).
+     Formato JPG o PNG (fotos) y MP4 (vídeos), el nombre debe ser exacto
+     (minúsculas, sin espacios).
   2) TEXTOS: todo lo que está entre [ ] corchetes es un ejemplo/placeholder que
      debes reescribir con tu historia real. Ábrelo con cualquier editor de
      texto (recomendado: VS Code, gratis) y usa buscar (Ctrl+F) "[" para
@@ -187,6 +191,29 @@
     color:var(--muted-2);font-size:12px;text-align:center;padding:10px;
   }
   @media (max-width:640px){ .tcard{width:200px} }
+  .tcard-video{cursor:pointer}
+  .tcard-video video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;background:#000}
+  .tcard-play{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  }
+  .tcard-play span{
+    width:54px;height:54px;border-radius:999px;background:#ffffff;color:#0a0a0b;
+    display:flex;align-items:center;justify-content:center;font-size:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.4);
+  }
+
+  /* ---------------- visor de vídeo a pantalla completa ---------------- */
+  .lightbox{
+    position:fixed;inset:0;z-index:999;background:rgba(5,5,6,.94);
+    display:none;align-items:center;justify-content:center;padding:24px;
+  }
+  .lightbox.open{display:flex}
+  .lightbox-inner{position:relative;width:100%;max-width:520px}
+  .lightbox-inner video{width:100%;max-height:80vh;border-radius:14px;display:block;background:#000}
+  .lightbox-close{
+    position:absolute;top:-46px;right:0;background:none;border:0;color:#fff;
+    font-size:28px;line-height:1;cursor:pointer;padding:8px;
+  }
 
   /* ---------------- instagram ---------------- */
   .ig{
@@ -550,10 +577,18 @@
   </div>
 </div>
 
+<!-- ============================ VISOR DE VÍDEO ============================ -->
+<div class="lightbox" id="videoLightbox" onclick="if(event.target===this) closeLightbox()">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLightbox()" aria-label="Cerrar">✕</button>
+    <video id="lightboxVideo" controls playsinline></video>
+  </div>
+</div>
+
 <script>
 /* ====================== CONFIG — edita aquí ====================== */
 // [PLACEHOLDER] Pon tu URL real de Calendly aquí (créala gratis en calendly.com)
-var CALENDLY_URL = "https://calendly.com/TU-USUARIO/llamada-gratuita";
+var CALENDLY_URL = "https://calendly.com/saminedelea23/30min";
 
 document.getElementById('calendlyBtn').href = CALENDLY_URL;
 document.getElementById('calendlyBtn').addEventListener('click', function(e){
@@ -567,7 +602,11 @@ document.getElementById('calendlyBtn').addEventListener('click', function(e){
 
 /* [PLACEHOLDER] Número de capturas/fotos de testimonios a mostrar en el carrusel */
 var RESULT_PHOTOS_COUNT = 4;
-/* Número de filas del carrusel (se reparten las fotos entre ellas) */
+/* [PLACEHOLDER] Vídeos de resultados — van mezclados con las fotos, se mueven
+   igual que ellas y al pincharlos se abren a pantalla completa. Añade más
+   guardando images/resultado-video-2.mp4, etc. y sumándolo a esta lista. */
+var RESULT_VIDEOS = ['images/resultado-video-1.mp4'];
+/* Número de filas del carrusel (se reparten las fotos y vídeos entre ellas) */
 var RESULT_ROWS = 2;
 
 // [PLACEHOLDER] CRM — URL de tu Google Apps Script (ver images/LEEME.txt para
@@ -582,38 +621,75 @@ function track(name, params){ try{ console.log('[track]', name, params); }catch(
 function goToForm(loc){ track('cta_click', {loc: loc}); document.getElementById('aplicar').scrollIntoView({behavior:'smooth'}); }
 
 /* ---- carrusel de resultados (se mueve solo) ---- */
-/* Cada tarjeta busca images/testimonio-N.jpg. Si no existe, se ve un aviso
-   en su lugar; en cuanto guardes el archivo con ese nombre, aparece solo.
-   Las fotos se reparten en RESULT_ROWS filas que se desplazan solas y sin
-   parar, alternando de dirección; al pasar el ratón por encima se detienen. */
-function makeTcard(src, label){
+/* Cada tarjeta de foto busca images/testimonio-N.jpg; si no existe, se ve un
+   aviso en su lugar. Los vídeos de RESULT_VIDEOS van mezclados con las
+   fotos. Todo se reparte en RESULT_ROWS filas que se desplazan solas y sin
+   parar, alternando de dirección; al pasar el ratón por encima se detienen.
+   Pinchar un vídeo lo abre a pantalla completa (las fotos no se abren). */
+function openLightbox(src){
+  var box = document.getElementById('videoLightbox');
+  var vid = document.getElementById('lightboxVideo');
+  vid.src = src;
+  box.classList.add('open');
+  vid.play().catch(function(){});
+  track('video_open', {src: src});
+}
+function closeLightbox(){
+  var box = document.getElementById('videoLightbox');
+  var vid = document.getElementById('lightboxVideo');
+  box.classList.remove('open');
+  vid.pause();
+  vid.removeAttribute('src');
+  vid.load();
+}
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape') closeLightbox();
+});
+
+function makeTcard(item){
   var c = document.createElement('div');
   c.className = 'tcard';
-  var img = document.createElement('img');
-  img.src = src;
-  img.alt = label;
-  var ph = document.createElement('span');
-  ph.className = 'tcard-ph';
-  ph.textContent = '📷 ' + src;
-  img.onerror = function(phEl){ return function(){ this.style.display = 'none'; phEl.style.display = 'flex'; }; }(ph);
-  c.appendChild(img);
-  c.appendChild(ph);
+  if (item.type === 'video'){
+    c.classList.add('tcard-video');
+    var vid = document.createElement('video');
+    vid.src = item.src;
+    vid.muted = true;
+    vid.playsInline = true;
+    vid.preload = 'auto';
+    var play = document.createElement('span');
+    play.className = 'tcard-play';
+    play.innerHTML = '<span>▶</span>';
+    c.appendChild(vid);
+    c.appendChild(play);
+    c.addEventListener('click', function(){ openLightbox(item.src); });
+  } else {
+    var img = document.createElement('img');
+    img.src = item.src;
+    img.alt = 'Resultado de alumno';
+    var ph = document.createElement('span');
+    ph.className = 'tcard-ph';
+    ph.textContent = '📷 ' + item.src;
+    img.onerror = function(phEl){ return function(){ this.style.display = 'none'; phEl.style.display = 'flex'; }; }(ph);
+    c.appendChild(img);
+    c.appendChild(ph);
+  }
   return c;
 }
 var tmarquee = document.getElementById('tmarquee');
 var allTesti = [];
-for (var ti = 1; ti <= RESULT_PHOTOS_COUNT; ti++){ allTesti.push('images/testimonio-' + ti + '.jpg'); }
+for (var ti = 1; ti <= RESULT_PHOTOS_COUNT; ti++){ allTesti.push({type: 'img', src: 'images/testimonio-' + ti + '.jpg'}); }
+RESULT_VIDEOS.forEach(function(src){ allTesti.push({type: 'video', src: src}); });
 for (var r = 0; r < RESULT_ROWS; r++){
-  var rowSrcs = allTesti.filter(function(_, idx){ return idx % RESULT_ROWS === r; });
-  if (!rowSrcs.length) continue;
+  var rowItems = allTesti.filter(function(_, idx){ return idx % RESULT_ROWS === r; });
+  if (!rowItems.length) continue;
   var rowEl = document.createElement('div');
   rowEl.className = 'tmarquee-row' + (r % 2 === 1 ? ' rtl' : '');
   var trackEl = document.createElement('div');
   trackEl.className = 'tmarquee-track';
-  trackEl.style.animationDuration = Math.max(14, rowSrcs.length * 7) + 's';
+  trackEl.style.animationDuration = Math.max(14, rowItems.length * 7) + 's';
   /* la fila se duplica una vez para que el bucle sea continuo, sin salto */
-  rowSrcs.concat(rowSrcs).forEach(function(src){
-    trackEl.appendChild(makeTcard(src, 'Resultado de alumno'));
+  rowItems.concat(rowItems).forEach(function(item){
+    trackEl.appendChild(makeTcard(item));
   });
   rowEl.appendChild(trackEl);
   tmarquee.appendChild(rowEl);
