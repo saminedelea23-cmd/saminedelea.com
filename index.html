@@ -18,7 +18,7 @@
        images/hero.jpg        → foto de presentación (arriba)
        images/antes.jpg       → tu foto de "antes"
        images/despues.jpg     → tu foto de "después"
-       images/testimonio-1.jpg  a  images/testimonio-7.jpg → capturas/fotos
+       images/testimonio-1.jpg  a  images/testimonio-4.jpg → capturas/fotos
        de resultados, se mueven solas en un carrusel (si quieres más o
        menos, cambia RESULT_PHOTOS_COUNT en el <script> de abajo).
      Formato JPG o PNG, el nombre debe ser exacto (minúsculas, sin espacios).
@@ -139,7 +139,7 @@
     aspect-ratio:4/3;
   }
   .ba-photo img{
-    width:100%;height:100%;object-fit:cover;pointer-events:none;
+    width:100%;height:100%;object-fit:contain;pointer-events:none;
     -webkit-touch-callout:none;-webkit-user-select:none;user-select:none;
   }
   .ba-arrow{
@@ -562,9 +562,9 @@ document.getElementById('calendlyBtn').addEventListener('click', function(e){
 });
 
 /* [PLACEHOLDER] Número de capturas/fotos de testimonios a mostrar en el carrusel */
-var RESULT_PHOTOS_COUNT = 7;
+var RESULT_PHOTOS_COUNT = 4;
 /* Número de filas del carrusel (se reparten las fotos entre ellas) */
-var RESULT_ROWS = 3;
+var RESULT_ROWS = 2;
 
 /* ====================== fin config ====================== */
 
