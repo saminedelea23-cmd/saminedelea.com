@@ -609,11 +609,21 @@ var RESULT_VIDEOS = ['images/resultado-video-1.mp4'];
 /* Número de filas del carrusel (se reparten las fotos y vídeos entre ellas) */
 var RESULT_ROWS = 2;
 
-// [PLACEHOLDER] CRM — URL de tu Google Apps Script (ver images/LEEME.txt para
-// los pasos). Mientras tenga el texto "TU-SCRIPT-ID" no se envía nada y solo
-// se guarda en la consola del navegador (F12) para que puedas probar la web
-// sin perder ningún dato.
-var GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbwSSrjzjIArj7mYZy2rxrP-6vNw6p7POtLpkCe0hVgJdUTYXV4iF6kB1MN7M_6i5zx6Lg/exec";
+// CRM — envía cada envío del formulario directo a tu Google Form (que a su
+// vez está enlazado a tu Google Sheet). No depende de Apps Script ni de
+// ninguna URL que caduque.
+var GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdCgEJWd2Z7vkQ7iiyhs6lxXx0nEFCHKnugTXsFZZlr-kNsuw/formResponse";
+var GOOGLE_FORM_FIELDS = {
+  nombre: 'entry.29655183',
+  email: 'entry.1567400067',
+  telefono: 'entry.1537883654',
+  edad: 'entry.1823163791',
+  ingresos: 'entry.1568804855',
+  capital: 'entry.1081745765',
+  ocupacion: 'entry.299745365',
+  disponible: 'entry.513822783',
+  situacion: 'entry.1601791995'
+};
 
 /* ====================== fin config ====================== */
 
@@ -742,17 +752,14 @@ function syncFormData(){
   var fd = new FormData(document.getElementById('applyForm'));
   fd.forEach(function(v, k){ formData[k] = v; });
 }
-/* Envía los datos del formulario a tu Google Sheet (ver GOOGLE_SHEETS_URL
-   arriba). Se hace con un <form> real enviado a un <iframe> oculto en vez de
-   fetch(): Apps Script responde con una redirección, y fetch en modo
-   'no-cors' a veces pierde el envío al seguirla (falla en silencio, sin
-   avisar a nadie). Un envío de formulario de verdad lo gestiona el propio
-   navegador y no tiene ese problema. */
+/* Envía los datos del formulario a tu Google Form (ver GOOGLE_FORM_URL
+   arriba), que a su vez los guarda en tu Google Sheet. Se hace con un
+   <form> real enviado a un <iframe> oculto en vez de fetch(): Google
+   responde con una redirección y fetch en modo 'no-cors' a veces pierde el
+   envío al seguirla (falla en silencio, sin avisar a nadie). Un envío de
+   formulario de verdad lo gestiona el propio navegador y no tiene ese
+   problema. */
 function sendToSheets(data){
-  if (GOOGLE_SHEETS_URL.indexOf('TU-SCRIPT-ID') !== -1){
-    console.log('[sheets] URL sin configurar, no se envía. Datos:', data);
-    return;
-  }
   try {
     var frameName = 'sheetsFrame_' + Date.now();
     var iframe = document.createElement('iframe');
@@ -761,16 +768,30 @@ function sendToSheets(data){
     document.body.appendChild(iframe);
 
     var form = document.createElement('form');
-    form.action = GOOGLE_SHEETS_URL;
+    form.action = GOOGLE_FORM_URL;
     form.method = 'POST';
     form.target = frameName;
     form.style.display = 'none';
 
-    var input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'payload';
-    input.value = JSON.stringify(data);
-    form.appendChild(input);
+    var telefono = ((data.prefijo || '') + ' ' + (data.telefono || '')).trim();
+    var values = {
+      nombre: data.nombre || '',
+      email: data.email || '',
+      telefono: telefono,
+      edad: data.edad || '',
+      ingresos: data.ingresos || '',
+      capital: data.capital || '',
+      ocupacion: data.ocupacion || '',
+      disponible: data.disponible || '',
+      situacion: data.situacion || ''
+    };
+    Object.keys(GOOGLE_FORM_FIELDS).forEach(function(key){
+      var input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = GOOGLE_FORM_FIELDS[key];
+      input.value = values[key];
+      form.appendChild(input);
+    });
 
     document.body.appendChild(form);
     form.submit();

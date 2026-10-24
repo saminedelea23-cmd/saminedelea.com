@@ -1,116 +1,99 @@
 ============================================================================
- CONECTAR EL FORMULARIO A GOOGLE SHEETS (tu "CRM" gratuito)
+ CRM — CÓMO LLEGAN TUS LEADS (Google Forms + Google Sheets)
 ============================================================================
-Cada vez que alguien complete el formulario de la web (nombre, email,
-WhatsApp, edad, ingresos, capital, ocupación, disponibilidad y su
-respuesta), aparecerá como una fila nueva en una hoja de cálculo tuya.
-No necesitas darme acceso a tu cuenta de Google en ningún momento.
+Tu web ya está conectada a tu Google Form. Cada persona que rellena el
+formulario de la web aparece sola, automáticamente, como fila nueva en tu
+Google Sheet. No tienes que tocar nada más para que esto funcione.
 
-PASO 1 — Crea la hoja
-----------------------
-1. Ve a sheets.google.com y crea una hoja nueva en blanco.
-2. Ponle el nombre que quieras, por ejemplo "Leads Sami Nedelea".
+Tienes DOS pestañas en tu hoja:
+  - "Respuestas de formulario 1": el registro en bruto, lo crea Google
+    solo. No la toques, es solo el almacén de datos.
+  - "Seguimiento": tu panel de trabajo (ver PASO siguiente si todavía no
+    lo has creado) — aquí es donde marcas Contactado / Estado / Importe
+    cerrado / Notas para cada lead.
 
-PASO 2 — Pega el script
-------------------------
-1. Dentro de la hoja, ve a Extensiones → Apps Script.
-2. Borra todo lo que haya en el editor y pega esto tal cual:
+============================================================================
+ ¿CÓMO SÉ SI LOS DATOS ESTÁN LLEGANDO?
+============================================================================
+Abre tu Google Sheet (la que enlazaste a tu Google Form) → pestaña
+"Respuestas de formulario 1". Cada envío real del formulario de la web
+aparece ahí como una fila nueva, con fecha y hora.
 
-function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(['Fecha', 'Nombre', 'Email', 'WhatsApp', 'Edad',
-      'Ingresos actuales', 'Capital a invertir', 'Ocupación',
-      'Disponibilidad', 'Por qué quiere empezar']);
+Si alguien dice que ha rellenado el formulario y no ves nada:
+  1. Comprueba que la web en Netlify tiene la última versión subida
+     (vuelve a arrastrar la carpeta si tienes dudas).
+  2. Abre la consola del navegador (F12) en la web y mira si hay algún
+     error en rojo al pulsar "Continuar" en el último paso del formulario.
+
+============================================================================
+ PASO — Crea (o revisa) tu panel "Seguimiento"
+============================================================================
+Esto es tuyo para gestionar el pipeline a mano: Contactado sí/no, Estado
+(Pendiente / Contactado / Cerrado / Perdido), cuánto dinero si cierras, y
+notas. Si ya lo tienes montado, no hace falta repetir esto.
+
+1. En tu Google Sheet → Extensiones → Apps Script.
+2. Borra lo que haya y pega esto:
+
+function onFormSubmitSami(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var values = e.namedValues;
+  var seg = ss.getSheetByName('Seguimiento');
+  if (!seg) {
+    seg = ss.insertSheet('Seguimiento');
+    seg.appendRow(['Fecha', 'Nombre', 'Email', 'Teléfono',
+      'Capital a invertir', 'Contactado', 'Estado',
+      'Importe cerrado (€)', 'Notas']);
   }
-  // La web envía los datos como un formulario real (e.parameter.payload);
-  // se deja también el formato antiguo (e.postData.contents) por si acaso.
-  var data;
-  if (e.parameter && e.parameter.payload) {
-    data = JSON.parse(e.parameter.payload);
-  } else {
-    data = JSON.parse(e.postData.contents);
+  function get(field) {
+    return values[field] ? values[field][0] : '';
   }
-  sheet.appendRow([
+  seg.appendRow([
     new Date(),
-    data.nombre || '',
-    data.email || '',
-    (data.prefijo || '') + ' ' + (data.telefono || ''),
-    data.edad || '',
-    data.ingresos || '',
-    data.capital || '',
-    data.ocupacion || '',
-    data.disponible || '',
-    data.situacion || ''
+    get('Nombre'),
+    get('Email'),
+    get('Teléfono'),
+    get('Capital a invertir'),
+    'No',
+    'Pendiente',
+    '',
+    ''
   ]);
-  return ContentService.createTextOutput(JSON.stringify({ ok: true }))
-    .setMimeType(ContentService.MimeType.JSON);
 }
 
-3. Arriba, dale un nombre al proyecto (ej. "Formulario web") y guarda
-   (icono de disquete o Ctrl+S).
-
-PASO 3 — Publícalo como "Aplicación web"
-------------------------------------------
-1. Botón azul "Implementar" (arriba a la derecha) → "Nueva implementación".
-2. En "Seleccionar tipo" pulsa el engranaje ⚙ y elige "Aplicación web".
-3. Configura:
-     - Descripción: lo que quieras.
-     - Ejecutar como: Yo (tu cuenta).
-     - Quién tiene acceso: Cualquier usuario.
-   (Esto es necesario para que la web pueda enviar datos; nadie puede leer
-   tu hoja desde ahí, solo añadir filas a través del formulario.)
-4. Pulsa "Implementar". Google te pedirá autorizar el script la primera
-   vez — dale permiso (es tu propio script, es seguro).
-5. Te dará una URL que termina en "/exec". Cópiala entera.
-
-PASO 4 — Pégamela a mí, o ponla tú misma
--------------------------------------------
-Mándame esa URL y yo la pongo, o edítala tú directamente: abre index.html
-con un editor de texto, busca "GOOGLE_SHEETS_URL" (cerca del final) y
-sustituye el valor de ejemplo por tu URL real, entre comillas.
-
-Hasta que no pongas esa URL, el formulario sigue funcionando con
-normalidad pero no envía nada a ningún sitio (solo lo verías en la consola
-del navegador, F12, si abrieras esa pestaña).
-
-¿Quieres editar la hoja más adelante, añadir columnas, cambiar colores,
-poner filtros? Es una hoja de cálculo normal tuya — haz lo que quieras,
-el script solo añade filas al final.
-
-============================================================================
- YA TENÍA EL SCRIPT PUESTO Y HA CAMBIADO — ¿CÓMO LO ACTUALIZO?
-============================================================================
-Si ya habías hecho estos pasos antes y el código de arriba ha cambiado
-(por ejemplo, para arreglar un fallo), NO hace falta crear una implementación
-nueva (eso te daría una URL distinta y tendrías que volver a configurarla).
-Solo:
-
-1. Abre tu hoja → Extensiones → Apps Script.
-2. Borra el código viejo y pega el nuevo (el de más arriba en este archivo).
 3. Guarda (Ctrl+S).
-4. Botón "Implementar" → "Gestionar implementaciones".
-5. Pulsa el icono del lápiz (editar) sobre tu implementación activa.
-6. En "Versión", elige "Nueva versión".
-7. Pulsa "Implementar".
+4. Icono del reloj ("Activadores" / "Triggers") en el menú de la
+   izquierda → "+ Añadir activador" (abajo a la derecha).
+5. Configura:
+     - Función: onFormSubmitSami
+     - Origen del evento: Desde la hoja de cálculo
+     - Tipo de evento: Al enviar formulario
+6. Guardar → Google te pide autorizar, dale permiso (es tu propio
+   script, es seguro).
 
-Tu URL (la que termina en /exec) NO cambia — sigue siendo la misma de
-siempre, solo que ahora ejecuta el código actualizado.
+Listo. A partir de ahora, cada lead nuevo aparece automáticamente en
+"Seguimiento" con estado "Pendiente" y "Contactado: No". Tú vas
+cambiando esas dos columnas a mano según trabajes cada lead (Contactado:
+Sí/No — Estado: Pendiente/Contactado/Cerrado/Perdido), y si cierras,
+pones el importe en "Importe cerrado (€)".
+
+Truco opcional: selecciona la columna "Estado" → Datos → Validación de
+datos → Lista de elementos → escribe: Pendiente, Contactado, Cerrado,
+Perdido → así te sale un desplegable en vez de escribir a mano.
 
 ============================================================================
- ¿CÓMO SÉ SI LOS ENVÍOS ESTÁN LLEGANDO?
+ ¿Y CALENDLY?
 ============================================================================
-Esto es lo más útil para comprobar si algo falla:
+Se queda igual, solo para que la gente reserve la hora de la llamada. Los
+DATOS de contacto (nombre, email, teléfono, capital, etc.) ya no dependen
+de Calendly para nada: llegan directos y fiables a tu Google Sheet en
+cuanto alguien termina el formulario de la web, antes incluso de que
+reserve la llamada.
 
-1. Abre tu hoja → Extensiones → Apps Script.
-2. En el menú de la izquierda, pulsa el icono del reloj ("Ejecuciones").
-3. Ahí ves cada vez que alguien ha enviado el formulario:
-     - Si no aparece NADA después de que alguien lo haya rellenado en la
-       web → el envío no está llegando a Google (puede ser que la web en
-       vivo tenga una versión antigua sin esta conexión: vuelve a subir la
-       carpeta a Netlify para estar segura).
-     - Si aparece pero en rojo/con error → ábrela y mira el mensaje de
-       error, mándamelo y lo arreglamos.
-     - Si aparece en verde ("Completado") → el dato se guardó bien; revisa
-       que estás mirando la pestaña/hoja correcta (abajo del todo, las
-       pestañas de tu documento).
+============================================================================
+ ¿PUEDO EDITAR LA HOJA, AÑADIR COLUMNAS, CAMBIAR COLORES?
+============================================================================
+Sí, es una hoja de cálculo normal tuya. Solo no borres ni renombres las
+pestañas "Respuestas de formulario 1" ni "Seguimiento", ni cambies los
+nombres de las columnas que usa el script (Nombre, Email, Teléfono,
+Capital a invertir) o dejará de rellenarlas bien.
